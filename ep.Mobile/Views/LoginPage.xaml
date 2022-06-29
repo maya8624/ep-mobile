@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" 
+    encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ep.Mobile.PageModels"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="ep.Mobile.Views.LoginPage"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.NavBarIsVisible="False"
+             BackgroundImageSource="restaurant.jpg">
+    <ContentPage.BindingContext>
+        <vm:LoginPageModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="10,300,10,-20">            
+            <StackLayout VerticalOptions="Center">
+                <Entry x:Name="id" Placeholder="Email" PlaceholderColor="White" Text="{Binding Email}" TextColor="White" />
+                <Entry x:Name="password" IsPassword="True" Placeholder="Password" PlaceholderColor="White" Text="{Binding Password}" TextColor="White"/>
+                <Button Text="Login" BackgroundColor="#60a154" TextColor="White" Command="{Binding LoginCommand}"
+                        CornerRadius="10"/>           
+                <Label Text="Forgot password?"                   
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        TextColor="#fff"
+                        x:Name="resetPassword" 
+                        Margin="20" 
+                        HorizontalTextAlignment="Center"
+                        TextDecorations="Underline">
+                    <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_ResetPassword"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+            <StackLayout>
+                <Label Text="Registor"                   
+                        x:Name="RegistrationBtn"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        TextColor="#fff"
+                        Margin="5" 
+                        HorizontalTextAlignment="Center"
+                        TextDecorations="Underline">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

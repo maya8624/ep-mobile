@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup xmlns="http://xamarin.com/schemas/2014/forms"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           xmlns:zxcm="clr-namespace:ZXing.Common;assembly=zxing.portable"
+           xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+           xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+           xmlns:vm="clr-namespace:ep.Mobile.PageModels"
+           xmlns:fw="clr-namespace:FontAwesome"
+           x:Class="ep.Mobile.Pages.QRPopupPage">
+    <xct:Popup.BindingContext>
+        <vm:BarcodePageModel />
+    </xct:Popup.BindingContext>
+    <StackLayout>
+        <StackLayout Orientation="Horizontal">            
+            <Entry Placeholder="Enter Order No" PlaceholderColor="LightGray" x:Name="OrderNo" WidthRequest="250" />
+            <Button Text="{x:Static fw:FontAwesomeIcons.CheckCircle}" Command="{Binding ClickCommand}" 
+                    BackgroundColor="Transparent" FontSize="20"
+                    FontFamily="FR" TextColor="Coral"
+                    CommandParameter="{Binding Source={x:Reference OrderNo}, Path=Text}" />
+        </StackLayout>
+        
+        <StackLayout>
+            <zxing:ZXingBarcodeImageView IsVisible="{Binding IsVisible}" BarcodeValue="{Binding Url}" WidthRequest="500" HeightRequest="400" >
+                <zxing:ZXingBarcodeImageView.BarcodeOptions>
+                    <zxcm:EncodingOptions Height="400" Width="500"/>
+                </zxing:ZXingBarcodeImageView.BarcodeOptions>
+            </zxing:ZXingBarcodeImageView>
+            <Button  BackgroundColor="Transparent" FontSize="20"
+                    FontFamily="FR" TextColor="DarkGray" Text="{x:Static fw:FontAwesomeIcons.WindowClose}" Command="{Binding CloseCommand}" />
+        </StackLayout>
+    </StackLayout>
+</xct:Popup>

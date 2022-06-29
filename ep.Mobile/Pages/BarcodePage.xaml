@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:zxcm="clr-namespace:ZXing.Common;assembly=zxing.portable"
+             xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+             xmlns:vm="clr-namespace:ep.Mobile.PageModels"
+             x:Class="ep.Mobile.Pages.BarcodePage">
+    <ContentPage.BindingContext>
+        <vm:BarcodePageModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry Placeholder="Name" PlaceholderColor="LightGray" x:Name="Name" />
+            <Entry Placeholder="Mobile Number" PlaceholderColor="LightGray" x:Name="Mobile" />
+            <Entry Placeholder="Order No" PlaceholderColor="LightGray" x:Name="OrderNo" />
+            <ImageButton Source="enter.png" HeightRequest="25" WidthRequest="25" 
+                     Command="{Binding ClickCommand}" 
+                     CommandParameter="{Binding Source={x:Reference OrderNo}, Path=Text}" />
+            <StackLayout>
+                <zxing:ZXingBarcodeImageView IsVisible="{Binding IsVisible}"  BarcodeValue="{Binding Url}" WidthRequest="500" HeightRequest="500" >
+                    <zxing:ZXingBarcodeImageView.BarcodeOptions>
+                        <zxcm:EncodingOptions Height="500" Width="500"/>
+                    </zxing:ZXingBarcodeImageView.BarcodeOptions>
+                </zxing:ZXingBarcodeImageView>               
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
