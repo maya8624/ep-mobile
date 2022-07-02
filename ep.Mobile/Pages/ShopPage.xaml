@@ -56,8 +56,8 @@
                                    PlaceholderColor="#696966" WidthRequest="350"
                                    HeightRequest="45">
                     <ctr:EntryOutlined.Behaviors>
-                        <xct:EmailValidationBehavior
-                        DecorationFlags="Trim" InvalidStyle="{StaticResource Key=InvalidStyle}"/>
+                        <!--<xct:EmailValidationBehavior
+                        DecorationFlags="Trim" InvalidStyle="{StaticResource Key=InvalidStyle}"/>-->
                     </ctr:EntryOutlined.Behaviors>
                 </ctr:EntryOutlined>
             </StackLayout>

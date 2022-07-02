@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\QRPopupPage.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Pages\QRPopupPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\Fonts\fa-solid-900.ttf" />
     <None Remove="Resources\Fonts\FreeRegular400.otf" />
     <None Remove="Resources\Fonts\OpenSans-Bold.ttf" />
@@ -27,7 +35,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.2" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />  
     <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />  
@@ -41,9 +48,6 @@
     <Compile Update="Pages\BarcodePage.xaml.cs">
       <DependentUpon>BarcodePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\QRPopupPage.xaml.cs">
-      <DependentUpon>QRPopupPage.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Pages\SearchDetailsPage.xaml.cs">
       <DependentUpon>SearchDetailsPage.xaml</DependentUpon>
     </Compile>
@@ -54,9 +58,6 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Pages\CustomerPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\QRPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\BarcodePage.xaml">
