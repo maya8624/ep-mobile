@@ -1,27 +1,88 @@
 # Xamarin.Android
-# Build a Xamarin.Android project.
-# Add steps that test, sign, and distribute an app, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/xamarin
 
 trigger:
 - main
 
-pool:
-  vmImage: 'macos-latest'
-
 variables:
-  buildConfiguration: 'Release'
-  outputDirectory: '$(build.binariesDirectory)/$(buildConfiguration)'
+- group: 'variables'
 
-steps:
-- task: NuGetToolInstaller@1
+jobs:
+  - job: 'BuildAndroid'
+    pool:
+      vmImage: 'windows-2022'
+      
+    variables:
+      buildConfiguration: 'Release'
+      outputDirectory: '$(build.binariesDirectory)/$(buildConfiguration)'
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '**/*.sln'
+    steps:
+      - task: NuGetToolInstaller@1
 
-- task: XamarinAndroid@1
-  inputs:
-    projectFile: '**/*droid*.csproj'
-    outputDirectory: '$(outputDirectory)'
-    configuration: '$(buildConfiguration)'
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '**/*.sln'
+      
+      - task: XamarinAndroid@1
+        inputs:
+          projectFile: '**/*droid*.csproj'
+          outputDirectory: '$(build.binariesDirectory)'
+          configuration: '$(buildConfiguration)'
+          msbuildVersionOption: latest
+      
+      - task: DownloadSecureFile@1
+        name: keystore
+        inputs:
+          secureFile: '$(KeyStore-FileName)'
+          
+      - task: AndroidSigning@3
+        inputs:
+          apkFiles: '**/*.apk'
+          apksign: true
+          zipalign: true
+          apksignerKeystoreFile: '$(KeyStore-FileName)'
+          apksignerKeyPassword: '$(KeyStore-Password)'
+          apksignerKeystoreAlias: '$(KeyStore-Alias)'
+          apksignerKeystorePassword: '$(KeyStore-Password)'
+      
+      - task: CopyFiles@2
+        inputs:
+          Contents: '**/*.apk'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          OverWrite: true
+          flattenFolders: true
+          
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
+          publishLocation: Container
+
+      - task: XamarinAndroid@1
+        inputs:
+          projectFile: '**/*droid*.csproj'
+          outputDirectory: '$(Build.BinariesDirectory)'
+          configuration: '$(BuildConfiguration)'
+          clean: true
+          msbuildVersionOption: latest
+          msbuildArguments: '/p:JavaSdkDirectory="$(JAVA_HOME_11_X64)/" 
+                             /p:AndroidPackageFormat=aab 
+                             /t:SignAndroidPackage 
+                             /p:AndroidNdkDirectory="$(androidNdkPath)" 
+                             /p:AndroidKeyStore="True" 
+                             /p:AndroidSigningKeyStore="$(keystore.secureFilePath)" 
+                             /p:AndroidSigningKeyPass="$(KeyStore-Password)" 
+                             /p:AndroidSigningKeyAlias="$(KeyStore-Alias)" 
+                             /p:AndroidSigningStorePass="$(KeyStore-Password)"'
+
+      - task: CopyFiles@2
+        inputs:
+          Contents: '**/*.aab'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          OverWrite: true
+          flattenFolders: true
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
+          publishLocation: Container
