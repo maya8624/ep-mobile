@@ -48,7 +48,7 @@ jobs:
         inputs:
           targetPath: 'ep.Android\obj\Release\110\android\bin\com.companyname.testmobile.apk'
           artifactName: 'AndroidApk'
-      
+
       # - task: CopyFiles@2
       #   inputs:
       #     Contents: '**/*.apk'
@@ -91,3 +91,20 @@ jobs:
       #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       #     ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
       #     publishLocation: Container
+  - job: AndroidBeta
+    displayName: "Release Android Beta"
+    dependsOn: [BuildAndroid]
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          artifact: AndroidApk
+      - task: AppCenterDistribute@3
+        inputs:
+          serverEndpoint: 'App Center'
+          appSlug: 'EP-Mobile/EP'
+          appFile: '$(Pipeline.Workspace)/com.companyname.testmobile.apk'
+          symbolsOption: 'Android'
+          releaseNotesOption: 'file'
+          releaseNotesFile: 'releasenotes.txt'
+          destinationType: 'groups'
+          distributionGroupId: '0d01adb6-b2fb-4385-a9fc-2f2f7ca74d17'
