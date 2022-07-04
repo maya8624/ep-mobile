@@ -29,10 +29,10 @@ jobs:
           configuration: '$(buildConfiguration)'
           msbuildVersionOption: latest
       
-      - task: DownloadSecureFile@1
-        name: keystore
-        inputs:
-          secureFile: '$(KeyStore-FileName)'
+      # - task: DownloadSecureFile@1
+      #   name: keystore
+      #   inputs:
+      #     secureFile: '$(KeyStore-FileName)'
           
       - task: AndroidSigning@3
         inputs:
@@ -44,45 +44,50 @@ jobs:
           apksignerKeystoreAlias: '$(KeyStore-Alias)'
           apksignerKeystorePassword: '$(KeyStore-Password)'
       
-      - task: CopyFiles@2
+      - task: PublishPipelineArtifact@1
         inputs:
-          Contents: '**/*.apk'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
-          OverWrite: true
-          flattenFolders: true
+          targetPath: '**/*.apk'
+          artifactName: 'AndroidApk'
+      
+      # - task: CopyFiles@2
+      #   inputs:
+      #     Contents: '**/*.apk'
+      #     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      #     OverWrite: true
+      #     flattenFolders: true
           
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
-          publishLocation: Container
+      # - task: PublishBuildArtifacts@1
+      #   inputs:
+      #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      #     ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
+      #     publishLocation: Container
 
-      - task: XamarinAndroid@1
-        inputs:
-          projectFile: '**/*droid*.csproj'
-          outputDirectory: '$(Build.BinariesDirectory)'
-          configuration: '$(BuildConfiguration)'
-          clean: true
-          msbuildVersionOption: latest
-          msbuildArguments: '/p:JavaSdkDirectory="$(JAVA_HOME_11_X64)/" 
-                             /p:AndroidPackageFormat=aab 
-                             /t:SignAndroidPackage 
-                             /p:AndroidNdkDirectory="$(androidNdkPath)" 
-                             /p:AndroidKeyStore="True" 
-                             /p:AndroidSigningKeyStore="$(keystore.secureFilePath)" 
-                             /p:AndroidSigningKeyPass="$(KeyStore-Password)" 
-                             /p:AndroidSigningKeyAlias="$(KeyStore-Alias)" 
-                             /p:AndroidSigningStorePass="$(KeyStore-Password)"'
+      # - task: XamarinAndroid@1
+      #   inputs:
+      #     projectFile: '**/*droid*.csproj'
+      #     outputDirectory: '$(Build.BinariesDirectory)'
+      #     configuration: '$(BuildConfiguration)'
+      #     clean: true
+      #     msbuildVersionOption: latest
+      #     msbuildArguments: '/p:JavaSdkDirectory="$(JAVA_HOME_11_X64)/" 
+      #                        /p:AndroidPackageFormat=aab 
+      #                        /t:SignAndroidPackage 
+      #                        /p:AndroidNdkDirectory="$(androidNdkPath)" 
+      #                        /p:AndroidKeyStore="True" 
+      #                        /p:AndroidSigningKeyStore="$(keystore.secureFilePath)" 
+      #                        /p:AndroidSigningKeyPass="$(KeyStore-Password)" 
+      #                        /p:AndroidSigningKeyAlias="$(KeyStore-Alias)" 
+      #                        /p:AndroidSigningStorePass="$(KeyStore-Password)"'
 
-      - task: CopyFiles@2
-        inputs:
-          Contents: '**/*.aab'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
-          OverWrite: true
-          flattenFolders: true
+      # - task: CopyFiles@2
+      #   inputs:
+      #     Contents: '**/*.aab'
+      #     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      #     OverWrite: true
+      #     flattenFolders: true
 
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
-          publishLocation: Container
+      # - task: PublishBuildArtifacts@1
+      #   inputs:
+      #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      #     ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
+      #     publishLocation: Container
