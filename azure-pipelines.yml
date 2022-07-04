@@ -46,7 +46,7 @@ jobs:
       
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: '**/*.apk'
+          targetPath: 'ep.Android\obj\Release\110\android\bin\com.companyname.testmobile.apk'
           artifactName: 'AndroidApk'
       
       # - task: CopyFiles@2
