@@ -2,6 +2,7 @@
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
+using ep.Mobile.Reference;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers.Commands;
@@ -107,7 +108,7 @@ namespace ep.Mobile.PageModels
             Task.Run(async () => await GetSummary());
 
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl($"{App.ApiBaseUrl}/hub/customer")
+                .WithUrl($"{Constant.ApiBaseUrl}/hub/customer")
                 .ConfigureLogging(logging => 
                 { 
                     logging.AddFilter("SignalR", LogLevel.Debug); 

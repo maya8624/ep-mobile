@@ -64,11 +64,32 @@ namespace ep.Mobile.Services
         }
 
         public async Task UpdateShopAsync(Shop shop)
-        { 
-            await _shopRepo.UpdateShopAsync(shop);
-            //await _apiService.PostAsync(shop, _createEndPoint);
-            // TODO: update shop data on server
-            //await _apiService.PutAsync(shop, _updateEndPoint);
+        {
+            try
+            {
+                var response = await _apiService.PostAsync(shop, _createEndPoint);
+                if (!string.IsNullOrEmpty(response))
+                {
+                    //TODO: show error                
+                }
+
+                var shopResponse = JsonConvert.DeserializeObject<ShopResponse>(response);
+                await SecureStorage.SetAsync("symKey", shopResponse.Key);
+                shop.ShopId = shopResponse.ShopId;
+                await App.Database.UpdateShopAsync(shop);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
+
+        //public async Task UpdateShopAsync(Shop shop)
+        //{ 
+        //    await _shopRepo.UpdateShopAsync(shop);
+        //    //await _apiService.PostAsync(shop, _createEndPoint);
+        //    // TODO: update shop data on server
+        //    //await _apiService.PutAsync(shop, _updateEndPoint);
+        //}
     }
 }

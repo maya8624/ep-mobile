@@ -34,25 +34,22 @@ namespace ep.Mobile
         //}
 
         private static Database database;
-
         public static Database Database
         {
             get
             {
                 if (database == null)
                 {
-                    database = new Database(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ep.db3"));
+                    var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ep.db3");
+                    database = new Database(path);
                 }
                 return database;
             }
         }
 
-        public static string ApiBaseUrl = "https://andysignalrapi.azurewebsites.net";
-
         public App()
         {
             InitializeComponent();
-
             DependencyService.Register<MockDataStore>();
             DependencyService.Register<IAPIService, APIService>();
             DependencyService.Register<ICustomerRepo, CustomerRepo>();

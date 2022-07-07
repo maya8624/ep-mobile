@@ -6,14 +6,15 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              x:Class="ep.Mobile.Pages.ShopPage"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             Title="Create an account"
+             Title="Save Shop Information"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true">
     <ContentPage.BindingContext>
         <vm:ShopPageModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout Spacing="3" Margin="0,20,0,0" 
+        <StackLayout Spacing="3" 
+                     Margin="0,20,0,0" 
                      HorizontalOptions="CenterAndExpand"
                      WidthRequest="350">
             <StackLayout HorizontalOptions="CenterAndExpand">
@@ -43,16 +44,16 @@
                                    PlaceholderColor="#696966" 
                                    WidthRequest="350"
                                    HeightRequest="45"/>
-                <ctr:EntryOutlined Text="{Binding Email, Mode=TwoWay}" 
+                <!--<ctr:EntryOutlined Text="{Binding Email, Mode=TwoWay}" 
                                    Placeholder="Email"
                                    PlaceholderColor="#696966" 
                                    WidthRequest="350"
-                                   HeightRequest="45">
+                                   HeightRequest="45">-->
                     <!--<ctr:EntryOutlined.Behaviors>
                         <xct:EmailValidationBehavior
                         DecorationFlags="Trim" InvalidStyle="{StaticResource Key=InvalidStyle}"/>
                     </ctr:EntryOutlined.Behaviors>-->
-                </ctr:EntryOutlined>            
+                <!--</ctr:EntryOutlined>-->
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Button Text="Create" 

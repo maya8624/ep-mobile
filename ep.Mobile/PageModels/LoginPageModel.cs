@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ep.Mobile.Interfaces.IAPIs;
-using ep.Mobile.Interfaces.IServices;
+﻿using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.PageModels.Base;
 using ep.Mobile.Pages;
+using ep.Mobile.Reference;
 using MvvmHelpers.Commands;
+using System;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -15,20 +12,17 @@ namespace ep.Mobile.PageModels
 {
     public class LoginPageModel : PageModelBase
     {
-        private readonly IShopService _shopService;
-        private readonly IPageService _pageService;
-        
         public AsyncCommand LoginCommand { get; }
-
+        private readonly IPageService _pageService;
+        private readonly IShopService _shopService;
         private string _email = "maya8624@hotmail.com";
-        private string _password = "Fk2g20.1";
-
         public string Email
         {
             get => _email;
             set => SetProperty(ref _email, value);
         }
 
+        private string _password;
         public string Password
         {
             get => _password;
@@ -37,47 +31,61 @@ namespace ep.Mobile.PageModels
 
         public LoginPageModel()
         {
+            LoginCommand = new AsyncCommand(LoginAsync);
             _pageService = DependencyService.Get<IPageService>();
             _shopService = DependencyService.Get<IShopService>();
-            LoginCommand = new AsyncCommand(Login);
         }
 
-        private async Task Login()
+        private async Task LoginAsync()
         {
             try
             {
-                if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
+                if (string.IsNullOrEmpty(Email))
                 {
-                    await _pageService.DisplayAlert("Info", "Please enter your credentials", "OK");
+                    await _pageService.DisplayAlert("Info", "Please enter your email", "OK");
                     return;
                 }
-
-                var shop = await App.Database.GetShopAsync();
-                if (shop == null)
+                if (string.IsNullOrEmpty(Password))
                 {
-                    await _pageService.DisplayAlert("Info", "Please register your shop details to log in", "OK");
+                    await _pageService.DisplayAlert("Info", "Please enter your password", "OK");
                     return;
                 }
-                
-                if (!shop.Email.Equals(Email))
+                var storedEmail = await SecureStorage.GetAsync(Constant.StorageEmailKey);
+                if (storedEmail == null)
+                {
+                    await _pageService.DisplayAlert("Info", "Email is not registered", "OK");
+                    return;
+                }
+                if (!Email.Equals(storedEmail))
                 {
                     await _pageService.DisplayAlert("Info", "Email doesn't match", "OK");
                     return;
                 }
-                
-                var savedPassword = await SecureStorage.GetAsync("password");
-                if (string.IsNullOrEmpty(savedPassword) || !savedPassword.Equals(Password))
+                var storedPassword = await SecureStorage.GetAsync(Constant.StoragePasswordKey);
+                if (storedPassword == null)
                 {
-                    //await SecureStorage.SetAsync("password", "Fk2g20.1");
-                    await _pageService.DisplayAlert("Info", "Password is in valid", "OK");
+                    await _pageService.DisplayAlert("Info", "Password is not registered", "OK");
                     return;
                 }
+                if (!storedPassword.Equals(Password))
+                {
+                    await _pageService.DisplayAlert("Info", "Password doen't match", "OK");
+                    return;
+                }
+                var shop = await App.Database.GetShopAsync();
+                if (shop == null)
+                {
+                    await _pageService.DisplayAlert("Info", "Please save your shop information. Tap Shop", "OK");
+                    await Shell.Current.GoToAsync($"//{nameof(ShopPage)}");
+                    return;
+                }
+
                 await Shell.Current.GoToAsync($"//{nameof(OrderPage)}");
                 //await Navigation.NavigateToAsync($"{nameof(LiveViewModel)}?name={Name}");
-
             }
             catch (Exception ex)
             {
+                //TODO: change the error message
                 await _pageService.DisplayAlert("Error", ex.Message, "OK");
             }
         }
