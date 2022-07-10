@@ -33,6 +33,9 @@
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
     </ShellItem>
+    <ShellItem Route="RegisterPage" FlyoutItemIsVisible="False">
+        <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate pages:RegisterPage}" />
+    </ShellItem>
     <TabBar>
         <!--<ShellContent Title="Login" FlyoutItem.IsVisible="False" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:LoginPage}" />-->
         <!--<ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />-->

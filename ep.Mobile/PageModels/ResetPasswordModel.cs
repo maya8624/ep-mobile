@@ -2,6 +2,7 @@
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
+using ep.Mobile.Reference;
 using ep.Mobile.Utils;
 using ep.Mobile.Views;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -96,9 +97,10 @@ namespace ep.Mobile.PageModels
                 var code = PasswordGenerator.GenerateVerificationCode();
                 await SecureStorage.SetAsync("verification_code", code);
                 var shop = await App.Database.GetShopAsync();
+                var userEmail = await SecureStorage.GetAsync(Constant.StorageEmailKey);
                 var email = new EmailForm
                 {
-                    To = shop.Email,
+                    To = userEmail,
                     Subject = "EP - Verification Code",
                     Content = $"Verification Code: {code}, Enter the 6 digit code on the app"
                 };

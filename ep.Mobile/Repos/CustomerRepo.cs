@@ -2,10 +2,7 @@
 using ep.Mobile.Interfaces.IRepos;
 using ep.Mobile.Models;
 using SQLite;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -58,7 +55,7 @@ namespace ep.Mobile.Repos
         {
             await InitTable();
             return await _connection.Table<Customer>()
-                .Where(c => c.LatestedMessageStatus == status)
+                .Where(c => c.MessageStatus == status)
                 .OrderByDescending(c => c.Id)
                 .ToListAsync();
         }

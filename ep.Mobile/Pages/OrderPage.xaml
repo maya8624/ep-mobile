@@ -81,7 +81,8 @@
                     </StackLayout>
                     <StackLayout Grid.Column="4" Orientation="Vertical" HorizontalOptions="CenterAndExpand">
                         <Button BackgroundColor="Transparent"
-                                WidthRequest="45" HeightRequest="42"
+                                HeightRequest="42"
+                                WidthRequest="45" 
                                 Text="{x:Static fontAwesome:FontAwesomeIcons.Equal}" FontSize="20" FontFamily="FR" TextColor="#2196F3" HorizontalOptions="Center" 
                                 Command="{Binding SummaryCommand}"
                                 CommandParameter="{x:Static en:MessageStatus.Other}"/> 
@@ -104,132 +105,133 @@
                 <Entry Placeholder="Enter Order No" WidthRequest="200" Keyboard="Numeric" />
                 <ImageButton x:Name="GridBtn" Source="enter.png" WidthRequest="45" HeightRequest="45" BackgroundColor="Transparent"/>
             </StackLayout>-->
-            <ListView x:Name="listOrders" ItemsSource="{Binding OrderItems}" Grid.Row="3"
-                      Margin="3" HasUnevenRows="True" SeparatorVisibility="None" HorizontalOptions="Start"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                <ListView.ItemTemplate>
+            <CollectionView x:Name="listOrders" 
+                            HorizontalOptions="Start"
+                            Grid.Row="3"
+                            ItemsSource="{Binding OrderItems}" 
+                            Margin="3" 
+                            SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <!--<SwipeView>
-                                <SwipeView.RightItems>
-                                    <SwipeItem Text="Delete" BackgroundColor="OrangeRed"/>
-                                </SwipeView.RightItems>-->
-                            <Frame HasShadow="True" CornerRadius="10" Margin="3" HeightRequest="70">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                        <StackLayout HorizontalOptions="Start" Padding="0,0,0,0">
-                                            <StackLayout Orientation="Horizontal" Padding="-3,0,0,0">                                            
-                                                <Label Text="{x:Static fontAwesome:FontAwesomeIcons.CaretDown}" 
-                                                        FontFamily="FR" FontSize="14" 
-                                                        TextColor="#2196F3" 
-                                                        VerticalOptions="Center"/>
-                                                <Label Text="Order No"
-                                                        FontSize="13"
-                                                        TextColor="#444444"
-                                                        HorizontalOptions="CenterAndExpand"
-                                                        VerticalOptions="CenterAndExpand"/>
-                                            </StackLayout>
-                                            <Label Text="{Binding OrderNo, StringFormat='{0:D3}'}"
-                                                   FontSize="20"
-                                                   TextColor="#2196F3"
-                                                   FontAttributes="Bold"
-                                                   HorizontalOptions="CenterAndExpand"
-                                                   VerticalOptions="CenterAndExpand"/>
-                                        <!--<Frame CornerRadius="20" WidthRequest="30"
-                                                HorizontalOptions="Start"
-                                                   BackgroundColor="#2196F3">
-                                            <Label Text="{Binding Seq}"
-                                                   FontSize="20"
-                                                   TextColor="#fff"
-                                                   HorizontalOptions="CenterAndExpand"
-                                                   VerticalOptions="CenterAndExpand"/>
-                                            </Frame>-->
-                                        </StackLayout>
-                                        <StackLayout Grid.Column="1" Padding="5,0,0,0">
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="{x:Static fontAwesome:FontAwesomeIcons.User}" 
-                                                       FontFamily="FR" FontSize="14" 
-                                                       TextColor="#2196F3" 
-                                                       VerticalOptions="Center"/>
-                                                <Label Text="{Binding Name}" 
-                                                       FontSize="15" 
-                                                       TextColor="#444444"/>
-                                            <Label Text="{x:Static fontAwesome:FontAwesomeIcons.MobileAlt}" 
-                                                       FontFamily="FR" 
-                                                       FontSize="15" 
-                                                       TextColor="#2196F3" 
-                                                       VerticalOptions="Center"/>
-                                            <Label Text="{Binding Mobile}" 
-                                                   TextColor="#444444" 
-                                                   FontSize="16" 
-                                                   HorizontalOptions="Center" 
-                                                   VerticalOptions="Center"/>
-                                            </StackLayout>
-                                            <StackLayout Orientation="Horizontal">
-                                            <Label Text="{x:Static fontAwesome:FontAwesomeIcons.CalendarAlt}" 
-                                                       FontFamily="FR" FontSize="14" 
-                                                       TextColor="#2196F3" 
-                                                       VerticalOptions="Center"/>
-                                            <Label Text="{Binding CreatedOn, StringFormat='{0:g}'}" 
-                                                       TextColor="#E8882A"
-                                                       FontAttributes="Bold"
-                                                       FontSize="14"/>
-                                            </StackLayout>
-                                            <StackLayout Orientation="Horizontal">                                           
-                                                <Label Text="{x:Static fontAwesome:FontAwesomeIcons.ArrowCircleDown}" 
-                                                       FontFamily="FR" 
-                                                       FontSize="15" 
-                                                       TextColor="#2196F3" 
-                                                       VerticalOptions="Center"/>
-                                                <Label Text="{Binding MessageStatus}" 
-                                                       TextColor="#444444" 
-                                                       FontSize="15" 
-                                                       VerticalOptions="Center"/>
-                                                <Label Text=":"/>
-                                                <Label Text="{Binding MessageCreatedOn, StringFormat='{}{0:hh:mm:ss tt}'}" 
-                                                       TextColor="#2196F3" 
-                                                       FontSize="14" 
-                                                       VerticalOptions="Center"/>
-                                            </StackLayout>
-                                        </StackLayout>
-                                        <StackLayout Grid.Column="2" 
-                                                     Orientation="Vertical"
-                                                     VerticalOptions="Center">
-                                            <Button BackgroundColor="Transparent"
-                                                    HeightRequest="48"
-                                                    Margin="-5"
-                                                    IsVisible="{Binding ShowSMSButton}"
-                                                    Text="{x:Static fontAwesome:FontAwesomeIcons.Sms}" 
-                                                    TextColor="#2196F3"
-                                                    FontSize="30"
-                                                    FontFamily="FR"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OrderPageModel }},
-                                                    Path=SMSCommand}"
-                                                    CommandParameter="{Binding SMSParam}"/>
-                                            <Button BackgroundColor="Transparent"
-                                                    Margin="-9"
-                                                    HeightRequest="48"
-                                                    IsVisible="{Binding ShowCloseButton}"
-                                                    HorizontalOptions="Center"
-                                                    Text="{x:Static fontAwesome:FontAwesomeIcons.Times}" 
-                                                    TextColor="#2196F3"
-                                                    FontSize="30"
-                                                    FontFamily="FR"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OrderPageModel }},
-                                                    Path=CloseCommand}"
-                                                    CommandParameter="{Binding SMSParam}"/>
+                        <!--<SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItem Text="Delete" BackgroundColor="OrangeRed"/>
+                            </SwipeView.RightItems>-->
+                        <Frame HasShadow="True" CornerRadius="10" Margin="3" HeightRequest="70">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackLayout HorizontalOptions="Start" Padding="0,0,0,0">
+                                    <StackLayout Orientation="Horizontal" Padding="-3,0,0,0">
+                                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.CaretDown}" 
+                                                    FontFamily="FR" FontSize="14" 
+                                                    TextColor="#2196F3" 
+                                                    VerticalOptions="Center"/>
+                                        <Label Text="Order No"
+                                                    FontSize="13"
+                                                    TextColor="#444444"
+                                                    HorizontalOptions="CenterAndExpand"
+                                                    VerticalOptions="CenterAndExpand"/>
                                     </StackLayout>
-                                </Grid>
-                            </Frame>
-                                <!--</SwipeView>-->
-                        </ViewCell>
+                                    <Label Text="{Binding OrderNo, StringFormat='{0:D3}'}"
+                                                FontSize="20"
+                                                TextColor="#2196F3"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="CenterAndExpand"
+                                                VerticalOptions="CenterAndExpand"/>
+                                    <!--<Frame CornerRadius="20" WidthRequest="30"
+                                            HorizontalOptions="Start"
+                                                BackgroundColor="#2196F3">
+                                        <Label Text="{Binding Seq}"
+                                                FontSize="20"
+                                                TextColor="#fff"
+                                                HorizontalOptions="CenterAndExpand"
+                                                VerticalOptions="CenterAndExpand"/>
+                                        </Frame>-->
+                                </StackLayout>
+                                <StackLayout Grid.Column="1" Padding="5,0,0,0">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.User}" 
+                                                    FontFamily="FR" FontSize="14" 
+                                                    TextColor="#2196F3" 
+                                                    VerticalOptions="Center"/>
+                                        <Label Text="{Binding Name}" 
+                                                    FontSize="15" 
+                                                    TextColor="#444444"/>
+                                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.MobileAlt}" 
+                                                    FontFamily="FR" 
+                                                    FontSize="15" 
+                                                    TextColor="#2196F3" 
+                                                    VerticalOptions="Center"/>
+                                        <Label Text="{Binding Mobile}" 
+                                                TextColor="#444444" 
+                                                FontSize="16" 
+                                                HorizontalOptions="Center" 
+                                                VerticalOptions="Center"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.CalendarAlt}" 
+                                                    FontFamily="FR" FontSize="14" 
+                                                    TextColor="#2196F3" 
+                                                    VerticalOptions="Center"/>
+                                        <Label Text="{Binding CreatedOn, StringFormat='{0:g}'}" 
+                                                    TextColor="#E8882A"
+                                                    FontAttributes="Bold"
+                                                    FontSize="14"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.ArrowCircleDown}" 
+                                                    FontFamily="FR" 
+                                                    FontSize="15" 
+                                                    TextColor="#2196F3" 
+                                                    VerticalOptions="Center"/>
+                                        <Label Text="{Binding MessageStatus}" 
+                                                    TextColor="#444444" 
+                                                    FontSize="15" 
+                                                    VerticalOptions="Center"/>
+                                        <Label Text=":"/>
+                                        <Label Text="{Binding MessageCreatedOn, StringFormat='{}{0:hh:mm:ss tt}'}" 
+                                                    TextColor="#2196F3" 
+                                                    FontSize="14" 
+                                                    VerticalOptions="Center"/>
+                                    </StackLayout>
+                                </StackLayout>
+                                <StackLayout Grid.Column="2" 
+                                                    Orientation="Vertical"
+                                                    VerticalOptions="Center">
+                                    <Button BackgroundColor="Transparent"
+                                                HeightRequest="48"
+                                                Margin="-5"
+                                                IsVisible="{Binding ShowSMSButton}"
+                                                Text="{x:Static fontAwesome:FontAwesomeIcons.Sms}" 
+                                                TextColor="#2196F3"
+                                                FontSize="30"
+                                                FontFamily="FR"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OrderPageModel }},
+                                                Path=SMSCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                    <Button BackgroundColor="Transparent"
+                                                Margin="-9"
+                                                HeightRequest="48"
+                                                IsVisible="{Binding ShowCloseButton}"
+                                                HorizontalOptions="Center"
+                                                Text="{x:Static fontAwesome:FontAwesomeIcons.Times}" 
+                                                TextColor="#2196F3"
+                                                FontSize="30"
+                                                FontFamily="FR"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OrderPageModel }},
+                                                Path=CloseCommand}"
+                                                CommandParameter="{Binding CustomerId}"/>
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                        <!--</SwipeView>-->
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Grid>
         
 

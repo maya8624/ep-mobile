@@ -18,22 +18,42 @@ namespace ep.Mobile.Data
             _database.CreateTableAsync<Shop>();
         }
 
+        public async Task DeleteAllCustomersAsync()
+        {
+            await _database.DeleteAllAsync<Customer>();
+        }
+
         public async Task<Customer> GetCustomerByIdAsync(int id)
         {
-            return await _database.Table<Customer>().FirstOrDefaultAsync(m => m.Id == id);
+            return await _database.Table<Customer>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Customer> GetCustomerByOrderNoAsync(string orderNo)
         {
-            return await _database.Table<Customer>().FirstOrDefaultAsync(c => c.OrderNo == orderNo);
+            return await _database
+                ?.Table<Customer>()
+                ?.FirstOrDefaultAsync(x => x.OrderNo == orderNo);
         }
-              
+         
+        public async Task<IEnumerable<Customer>> GetCustomersByMessageStatus(MessageStatus status)
+        {
+            var results = _database?.Table<Customer>();
+            if (status != MessageStatus.Other)
+            {
+                results = results?.Where(x => x.MessageStatus == status);
+            }
+            return await results
+                ?.OrderByDescending(x => x.OrderNo)
+                ?.ToListAsync();
+        }
+
         public async Task<IEnumerable<Customer>> GetCustomersByOrderStatusAsync(OrderStatus status)
         {
-            return await _database.Table<Customer>()
-                .Where(c => c.OrderStatus == status)
-                .OrderByDescending(c => c.OrderNo)
-                .ToListAsync();
+            return await _database
+                ?.Table<Customer>()
+                ?.Where(c => c.OrderStatus == status)
+                ?.OrderByDescending(c => c.OrderNo)
+                ?.ToListAsync();
         }
 
         public async Task<int> SaveCustomerAsync(Customer customer)

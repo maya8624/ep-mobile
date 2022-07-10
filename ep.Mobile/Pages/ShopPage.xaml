@@ -6,84 +6,59 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              x:Class="ep.Mobile.Pages.ShopPage"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             Title="Create an account"
+             Title="Save Shop Information"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true">
     <ContentPage.BindingContext>
         <vm:ShopPageModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout Spacing="3" Margin="0,20,0,0" 
+        <StackLayout Spacing="3" 
+                     Margin="0,20,0,0" 
                      HorizontalOptions="CenterAndExpand"
                      WidthRequest="350">
-            <StackLayout Orientation="Horizontal">
-                <!--<Label Text="{x:Static fontAwesome:FontAwesomeIcons.NetworkWired}" FontSize="15" FontFamily="FR" TextColor="#adaaa1" VerticalOptions="Center" />-->
-               
-            </StackLayout>
-            <!--<StackLayout Orientation="Horizontal">
-                <Label Text="{x:Static fontAwesome:FontAwesomeIcons.NetworkWired}" FontSize="15" FontFamily="FR" TextColor="#adaaa1" VerticalOptions="Center" />
-                <Entry Text="{Binding ABN, Mode=TwoWay}" Placeholder="Enter ABN" WidthRequest="350" VerticalOptions="Center"
-                       HorizontalOptions="StartAndExpand"/>
-            </StackLayout>-->
-            <StackLayout Orientation="Horizontal">
-                <!--<ctr:MyEntry Placeholder="custom control" WidthRequest="350"/>-->
-            </StackLayout>
             <StackLayout HorizontalOptions="CenterAndExpand">
-                <ctr:EntryOutlined Text="{Binding ABN, Mode=TwoWay}" 
-                                Placeholder="ABN" 
-                                PlaceholderColor="#898f8a" 
-                                HeightRequest="45"
-                                WidthRequest="350"/>
-                <!--<Label Text="{x:Static fontAwesome:FontAwesomeIcons.Sign}" FontSize="20" FontFamily="FR" TextColor="#adaaa1" VerticalOptions="Center" />-->
-                <!--<Entry x:Name="address" Text="{Binding Address, Mode=TwoWay}" Placeholder="Enter Address" WidthRequest="350"
-                       VerticalOptions="Center" HorizontalOptions="StartAndExp-->
-                <ctr:EntryOutlined Text="{Binding Address, Mode=TwoWay}" Placeholder="Address" 
-                                   PlaceholderColor="#696966" BorderColor="#696966" 
-                                   HeightRequest="45"
-                                   WidthRequest="350" />
-                <ctr:EntryOutlined Text="{Binding Name, Mode=TwoWay}" Placeholder="Shop Name" PlaceholderColor="#696966"                                
-                                   HeightRequest="45"
-                                   WidthRequest="350" />
-                <ctr:EntryOutlined Text="{Binding Owner, Mode=TwoWay}" Placeholder="Owner" PlaceholderColor="#696966"
+                <ctr:EntryOutlined Text="{Binding ABN, Mode=TwoWay}"
+                                   Placeholder="ABN"
+                                   PlaceholderColor="#898f8a" 
                                    HeightRequest="45"
                                    WidthRequest="350"/>
-                <ctr:EntryOutlined Text="{Binding Telephone, Mode=TwoWay}" 
-                                   Placeholder="Telephone" 
-                                   PlaceholderColor="#696966" WidthRequest="350"
+                <ctr:EntryOutlined Text="{Binding Address, Mode=TwoWay}" 
+                                   Placeholder="Address" 
+                                   PlaceholderColor="#696966" 
+                                   BorderColor="#696966" 
+                                   HeightRequest="45"
+                                   WidthRequest="350" />
+                <ctr:EntryOutlined Text="{Binding Name, Mode=TwoWay}" 
+                                   Placeholder="Shop Name" 
+                                   PlaceholderColor="#696966"
+                                   HeightRequest="45"
+                                   WidthRequest="350" />
+                <ctr:EntryOutlined Text="{Binding Owner, Mode=TwoWay}" 
+                                   Placeholder="Owner" 
+                                   PlaceholderColor="#696966"
+                                   HeightRequest="45"
+                                   WidthRequest="350"/>
+                <ctr:EntryOutlined Text="{Binding Phone, Mode=TwoWay}" 
+                                   Placeholder="Phone" 
+                                   PlaceholderColor="#696966" 
+                                   WidthRequest="350"
                                    HeightRequest="45"/>
-                <ctr:EntryOutlined Text="{Binding Email, Mode=TwoWay}" 
+                <!--<ctr:EntryOutlined Text="{Binding Email, Mode=TwoWay}" 
                                    Placeholder="Email"
-                                   PlaceholderColor="#696966" WidthRequest="350"
-                                   HeightRequest="45">
-                    <ctr:EntryOutlined.Behaviors>
-                        <!--<xct:EmailValidationBehavior
-                        DecorationFlags="Trim" InvalidStyle="{StaticResource Key=InvalidStyle}"/>-->
-                    </ctr:EntryOutlined.Behaviors>
-                </ctr:EntryOutlined>
+                                   PlaceholderColor="#696966" 
+                                   WidthRequest="350"
+                                   HeightRequest="45">-->
+                    <!--<ctr:EntryOutlined.Behaviors>
+                        <xct:EmailValidationBehavior
+                        DecorationFlags="Trim" InvalidStyle="{StaticResource Key=InvalidStyle}"/>
+                    </ctr:EntryOutlined.Behaviors>-->
+                <!--</ctr:EntryOutlined>-->
             </StackLayout>
-
-            <!--<AbsoluteLayout>
-                <ListView x:Name="countryListView" ItemsSource="{Binding Places}" IsVisible="True" CachingStrategy="RecycleElement" BackgroundColor="White" AbsoluteLayout.LayoutBounds="20,110,269,160" AbsoluteLayout.LayoutFlags="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Frame>
-                                    <StackLayout BackgroundColor="White">
-                                        <Label Text="{Binding .}" FontSize="16" TextColor="#FF464859"/>
-                                    </StackLayout>
-                                </Frame>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </AbsoluteLayout>-->
-            
-            <!--<Entry Text="{Binding Password, Mode=TwoWay}" Placeholder="Password"/>
-            <Entry Text="{Binding ConfirmPassword, Mode=TwoWay}" Placeholder="Confirm Password"/>-->
             <StackLayout Orientation="Horizontal">
-                <!--<Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>-->
                 <Button Text="Create" 
-                        Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"
+                        Command="{Binding SaveCommand}" 
+                        HorizontalOptions="FillAndExpand"
                         CornerRadius="5"
                         Margin="0,10,0,0"/>
             </StackLayout>

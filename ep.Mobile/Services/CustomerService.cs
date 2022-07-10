@@ -1,12 +1,12 @@
 ﻿using ep.Mobile.Enums;
 using ep.Mobile.Interfaces.IAPIs;
-using ep.Mobile.Interfaces.IRepos;
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -15,14 +15,11 @@ namespace ep.Mobile.Services
     public class CustomerService : ICustomerService
     {
         private readonly IAPIService _apiService;
-        private readonly ICustomerRepo _customerRepo;
         private readonly ISmsService _smsService;
-        private readonly string _createCustomerEndPoint = "customer/create";
 
         public CustomerService()
         {
             _apiService = DependencyService.Get<IAPIService>();
-            _customerRepo = DependencyService.Get<ICustomerRepo>();
             _smsService = DependencyService.Get<ISmsService>();
         }
 
@@ -30,134 +27,136 @@ namespace ep.Mobile.Services
         {
             try
             {
-                //return await _customerRepo.GetByIdAsync(id);
                 return await App.Database.GetCustomerByIdAsync(id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        public async Task<Customer> GetCustomerByOrderNoAsync(string orderNo)
+        public async Task<OrderItem> GetCustomerByOrderNoAsync(string orderNo)
         {
             try
             {
-                //return await _customerRepo.GetByIdAsync(id);
-                return await App.Database.GetCustomerByOrderNoAsync(orderNo);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<OrderItem>> GetCustomersAsync()
-        {
-            try
-            {  
-                var customers = await App.Database.GetCustomersByOrderStatusAsync(OrderStatus.Active);
-                var orders = new List<OrderItem>();
-                foreach (var customer in customers)
-                {
-                    orders.Add(new OrderItem
-                    {
-                        CreatedOn = customer.CreatedOn,
-                        CustomerId = customer.Id,
-                        MessageStatus = customer.LatestedMessageStatus,
-                        MessageCreatedOn = customer.UpdatedOn ?? customer.CreatedOn,
-                        Mobile = customer.Mobile,
-                        Name = customer.Name,
-                        OrderNo = customer.OrderNo,
-                        ShopId = customer.ShopId,
-                        ShowCloseButton = customer.LatestedMessageStatus == MessageStatus.Sent || customer.LatestedMessageStatus == MessageStatus.Resent,
-                        ShowSMSButton = customer.LatestedMessageStatus != MessageStatus.Completed,
-                        SMSParam = new SmsParam
-                        {
-                            CustomerId = customer.Id,
-                            ShopId = customer.ShopId,
-                            MessageStatus = customer.LatestedMessageStatus
-                        }
-                    });
-                }
-                return orders.OrderByDescending(o => o.CustomerId);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-                
-        public async Task<IEnumerable<OrderItem>> GetCustomerOrdersByMessageStatus(MessageStatus status)
-        {
-            try
-            {
-                var orders = new List<OrderItem>();
-                var customers = status == MessageStatus.Other ?
-                    await _customerRepo.GetAllAsync() :
-                    await _customerRepo.GetCustomersByMessageStatusAsync(status);
-                foreach (var customer in customers)
-                {
-                    orders.Add(new OrderItem
-                    {
-                        CustomerId = customer.Id,
-                        CreatedOn = customer.CreatedOn,
-                        Mobile = customer.Mobile,
-                        Name = customer.Name,
-                        MessageStatus = customer.LatestedMessageStatus,
-                        MessageCreatedOn = customer.UpdatedOn ?? customer.CreatedOn,
-                        OrderNo = customer.OrderNo,
-                        SMSParam = new SmsParam 
-                        { 
-                            CustomerId = customer.Id, 
-                            MessageStatus = customer.LatestedMessageStatus, 
-                            ShopId = customer.ShopId 
-                        }
-                    });
-                }
-                return orders;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        public async Task<OrderItem> SendSMSAsync(SmsParam param)
-        {
-            try
-            {
-                var customer = await GetCustomerByIdAsync(param.CustomerId);
-                var message = SetMessage(customer, param);               
-                await SendMessageAsync(customer.Mobile, message.Text);
-
+                var customer = await App.Database.GetCustomerByOrderNoAsync(orderNo);
                 var orderItem = new OrderItem
                 {
-                    CustomerId = customer.Id,
                     CreatedOn = customer.CreatedOn,
-                    Icon = message.Icon,
-                    MessageCreatedOn = message.CreatedOn,
+                    CustomerId = customer.Id,
+                    MessageStatus = customer.MessageStatus,
+                    MessageCreatedOn = customer.UpdatedOn ?? customer.CreatedOn,
                     Mobile = customer.Mobile,
                     Name = customer.Name,
                     OrderNo = customer.OrderNo,
-                    MessageStatus = message.Status,
-                    ShopId = message.ShopId,
-                    ShowCloseButton = true,
-                    Text = message.Text,
-                    SMSParam = new SmsParam { CustomerId = customer.Id, MessageStatus = message.Status, ShopId = customer.ShopId}
+                    //ShowCloseButton = x.MessageStatus == MessageStatus.Sent || x.MessageStatus == MessageStatus.Resent,
+                    //ShowSMSButton = x.MessageStatus != MessageStatus.Completed
                 };
-                                
-                //await _messageRepo.InsertAsync(message);
-                await App.Database.SaveMessageAsync(message);
-                customer.UpdatedOn = message.CreatedOn;
-                customer.LatestedMessageStatus = message.Status;
-                //await _customerRepo.UpdateAsync(customer);
-                await App.Database.UpdateCustomerAsync(customer);
-                
-                //await _apiService.PostAsync(message, _messageCreateEndPoint);
                 return orderItem;
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<OrderItem>> GetOrderItemsAsync()
+        {
+            try
+            {
+                var customers = await App.Database.GetCustomersByOrderStatusAsync(OrderStatus.Active);
+                return customers.Select(x => new OrderItem
+                {
+                    CreatedOn = x.CreatedOn,
+                    CustomerId = x.Id,
+                    MessageStatus = x.MessageStatus,
+                    MessageCreatedOn = x.UpdatedOn ?? x.CreatedOn,
+                    Mobile = x.Mobile,
+                    Name = x.Name,
+                    OrderNo = x.OrderNo,
+                    ShowCloseButton = x.MessageStatus == MessageStatus.Sent || x.MessageStatus == MessageStatus.Resent,
+                    ShowSMSButton = x.MessageStatus != MessageStatus.Completed
+                });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<OrderItem>> GetOrderItemsByMessageStatus(MessageStatus status)
+        {
+            try
+            {
+                var customers = await App.Database.GetCustomersByMessageStatus(status);
+                return customers.Select(x => new OrderItem
+                {
+                    CreatedOn = x.CreatedOn,
+                    CustomerId = x.Id,
+                    MessageStatus = x.MessageStatus,
+                    MessageCreatedOn = x.UpdatedOn ?? x.CreatedOn,
+                    Mobile = x.Mobile,
+                    Name = x.Name,
+                    OrderNo = x.OrderNo,
+                    ShowCloseButton = x.MessageStatus == MessageStatus.Sent || x.MessageStatus == MessageStatus.Resent,
+                    ShowSMSButton = x.MessageStatus != MessageStatus.Completed
+                });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        
+        public async Task<Summary> GetOrderSummaryAsync()
+        {
+            try
+            {
+                var shop = await App.Database.GetShopAsync();
+                var customers = await App.Database.GetCustomersAsync();
+                var summary = new Summary
+                {
+                    Completed = customers.Count(x => x.MessageStatus == MessageStatus.Completed),
+                    Prep = customers.Count(x => x.MessageStatus == MessageStatus.Prep),
+                    Resent = customers.Count(x => x.MessageStatus == MessageStatus.Resent),
+                    Sent = customers.Count(x => x.MessageStatus == MessageStatus.Sent),
+                    ShopName = shop.Name,
+                    Total = customers.Count()
+                };
+                return summary;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+      
+        public async Task<OrderItem> SendSMSAsync(OrderItem orderItem)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    var message = CreateMessage(orderItem);
+                    await SendMessageAsync(orderItem.Mobile, message.Text);
+                    await App.Database.SaveMessageAsync(message);
+
+                    var customer = await App.Database.GetCustomerByIdAsync(orderItem.CustomerId);
+                    customer.UpdatedOn = message.CreatedOn;
+                    customer.MessageStatus = message.Status;
+                    customer.OrderStatus = message.Status == MessageStatus.Completed ? OrderStatus.Closed : OrderStatus.Active;
+                    await App.Database.UpdateCustomerAsync(customer);
+
+                    orderItem.Icon = message.Icon;
+                    orderItem.MessageCreatedOn = message.CreatedOn;
+                    orderItem.MessageStatus = message.Status;
+                    orderItem.ShowCloseButton = true;
+                    orderItem.Text = message.Text;
+                    scope.Complete();
+                }                
+                return orderItem;
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -168,7 +167,10 @@ namespace ep.Mobile.Services
             try
             {
                 await App.Database.SaveCustomerAsync(customer);
-                //await _apiService.PostAsync(customer, _createCustomerEndPoint);
+                //if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                //{
+                //    await _apiService.PostAsync(customer, Constant.CreateCustomerEndpoint);
+                //}
             }
             catch (Exception)
             {
@@ -190,22 +192,21 @@ namespace ep.Mobile.Services
             catch (Exception ex)
             {
                 Console.WriteLine("Error occurred", ex.Message);
-                throw new Exception();
+                throw;
             }
         }
 
-        private Message SetMessage(Customer customer, SmsParam param)
+        private Message CreateMessage(OrderItem orderItem)
         {
             var message = new Message
             {
-                CustomerId = customer.Id,
+                CustomerId = orderItem.CustomerId,
                 CreatedOn = DateTimeOffset.UtcNow,
-                ShopId = customer.ShopId,
-                OrderNo = customer.OrderNo,
-                Text = $"Your Order: {customer.OrderNo} is ready to pick up"
+                OrderNo = orderItem.OrderNo,
+                Text = $"Order No: {orderItem.OrderNo} is ready to pick up!!"
             };
 
-            switch (param.MessageStatus)
+            switch (orderItem.MessageStatus)
             {
                 case MessageStatus.Prep:
                     message.Icon = "sent";
@@ -219,17 +220,12 @@ namespace ep.Mobile.Services
                 case MessageStatus.Completed:
                     message.Icon = "complete";
                     message.Status = MessageStatus.Completed;
-                    message.Text = $"Order: {customer.OrderNo} has been picked up.";
+                    message.Text = $"Order: {orderItem.OrderNo} has been picked up.";
                     break;
                 default:
-                    throw new ArgumentException("Invalid status for command", nameof(param.MessageStatus));
+                    throw new ArgumentException("Invalid status for command", nameof(orderItem.MessageStatus));
             }
             return message;
-        }
-
-        public async Task DeleteAsync(Customer customer)
-        {
-            await _customerRepo.DeleteAsync(customer);
         }
     }
 }

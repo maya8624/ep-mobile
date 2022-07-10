@@ -13,6 +13,8 @@ namespace ep.Mobile.Models
         
         public DateTimeOffset MessageCreatedOn { get; set; }
         
+        public MessageStatus MessageStatus { get; set; }
+
         public string Mobile { get; set; } = string.Empty;
 
         public string Name { get; set; } = string.Empty;
@@ -21,14 +23,10 @@ namespace ep.Mobile.Models
 
         public int ShopId { get; set; }
 
-        public MessageStatus MessageStatus { get; set; }
-
         public bool ShowCloseButton { get; set; }
 
         public bool ShowSMSButton { get; set; } = true;
 
         public string Text { get; set; }
-
-        public SmsParam SMSParam { get; set; }
     }
 }

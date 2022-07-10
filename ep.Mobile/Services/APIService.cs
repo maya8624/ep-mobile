@@ -1,5 +1,6 @@
 ﻿using ep.Mobile.Interfaces.IAPIs;
 using ep.Mobile.Models;
+using ep.Mobile.Reference;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace ep.Mobile.Services
 
         public async Task<IEnumerable<T>> GetAllAsync<T>(string endPoint)
         {
-            var apiUrl = $"{App.ApiBaseUrl}/{endPoint}";
+            var apiUrl = $"{Constant.ApiBaseUrl}/{endPoint}";
             var content = await _client.GetStringAsync(apiUrl);
             return JsonConvert.DeserializeObject<IEnumerable<T>>(content);
         }
@@ -29,7 +30,7 @@ namespace ep.Mobile.Services
         {
             try
             {
-                var uri = $"{App.ApiBaseUrl}/{endPoint}/{id}";
+                var uri = $"{Constant.ApiBaseUrl}/{endPoint}/{id}";
                 var content = await _client.GetStringAsync(uri);
                 var response = JsonConvert.DeserializeObject<T>(content);
                 return response;
@@ -44,9 +45,13 @@ namespace ep.Mobile.Services
         {
             try
             {
-                var apiUrl = $"{App.ApiBaseUrl}/{endPoint}";
+                var apiUrl = $"{Constant.ApiBaseUrl}/{endPoint}";
                 var content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
                 var response = await _client.PostAsync(apiUrl, content);
+                if (response.IsSuccessStatusCode is false)
+                {
+                    throw new Exception("An error occurred while saving in the server");
+                }
                 var result = await response.Content.ReadAsStringAsync();
                 return result;
             }
@@ -60,7 +65,7 @@ namespace ep.Mobile.Services
         {
             try
             {
-                var apiUrl = $"{App.ApiBaseUrl}/{endPoint}";
+                var apiUrl = $"{Constant.ApiBaseUrl}/{endPoint}";
                 var content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
                 var result = await _client.PutAsync(apiUrl, content);
                 return Convert.ToInt16(result);

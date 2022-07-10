@@ -3,7 +3,6 @@ using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Logging;
 using MvvmHelpers.Commands;
 using Newtonsoft.Json;
 using System;
@@ -12,7 +11,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -20,6 +18,15 @@ namespace ep.Mobile.PageModels
 {
     public class OrderPageModel : PageModelBase, IQueryAttributable
     {
+        private readonly ICustomerService _customerService;
+        private readonly IPageService _pageService;
+        private bool _connected;
+        public AsyncCommand<OrderItem> CloseComand { get; private set; }
+        private HubConnection HubConnection { get; set; }
+        public ObservableCollection<OrderItem> OrderItems { get; private set; } = new ObservableCollection<OrderItem>();
+        public AsyncCommand<OrderItem> SMSCommand { get; private set; }
+        public AsyncCommand<MessageStatus> SummaryCommand { get; private set; }
+
         private int _prep;
         public int Prep
         {
@@ -82,39 +89,150 @@ namespace ep.Mobile.PageModels
             get => _showSMS;
             set => SetProperty(ref _showSMS, value);
         }
-
-        private readonly ICustomerService _customerService;
-        private readonly HubConnection _hubConnection;
-        private bool _connected;
-
-        public AsyncCommand<SmsParam> CloseComand { get; set; }
-        public AsyncCommand<SmsParam> SMSCommand { get; private set; }
-        public AsyncCommand<MessageStatus> SummaryCommand { get; set; }
-        public ObservableCollection<OrderItem> OrderItems { get; set; }
-
-        public ICommand LoadCommand { get; protected set; }
-
+                
         public OrderPageModel()
         {
-            _currentDate = DateTime.Now.ToString("MMM dd, yyy");
+            _currentDate = DateTime.Now.ToString("MMM dd, yyyy");
             _customerService = DependencyService.Get<ICustomerService>();
-            CloseComand = new AsyncCommand<SmsParam>(CloseOrderItem);
-            SummaryCommand = new AsyncCommand<MessageStatus>(GetOrdersByMessageStatus);
-            SMSCommand = new AsyncCommand<SmsParam>(SendMessageAsync);
-            OrderItems = new ObservableCollection<OrderItem>(
-                 Task.Run(async () => await _customerService.GetCustomersAsync()).Result
-            );
-            Task.Run(async () => await GetSummary());
+            _pageService = DependencyService.Get<IPageService>();
+            CloseComand = new AsyncCommand<OrderItem>(CloseAsync);
+            SummaryCommand = new AsyncCommand<MessageStatus>(SummaryAsync);
+            SMSCommand = new AsyncCommand<OrderItem>(SendMessageAsync);
+        }
 
-            _hubConnection = new HubConnectionBuilder()
-                .WithUrl($"{App.ApiBaseUrl}/hub/customer")
-                .ConfigureLogging(logging => 
-                { 
-                    logging.AddFilter("SignalR", LogLevel.Debug); 
-                })
-                .Build();
+        private async Task CloseAsync(OrderItem orderItem)
+        {
+            try
+            {
+                orderItem.MessageStatus = MessageStatus.Completed;
+                await _customerService.SendSMSAsync(orderItem);
+                OrderItems.Remove(orderItem);
+            }
+            catch (Exception ex)
+            {
+                await _pageService.DisplayAlert("Error", $"{nameof(CloseAsync)}|message: {ex.Message}", "Close");
+                throw;
+            }
+        }
 
-            HubOn();
+        private async Task GetOrderItemsAsync()
+        {
+            try
+            {
+                if (OrderItems.Any()) return;
+                var orderItems = await _customerService.GetOrderItemsAsync();
+                //TODO: check Load method
+                OrderItems.Clear();
+                foreach (var orderItem in orderItems)
+                {
+                    OrderItems.Add(orderItem);
+                }
+            }
+            catch (Exception ex)
+            {
+                await _pageService.DisplayAlert("Error", $"{nameof(GetOrderItemsAsync)}|message: {ex.Message}", "Ok");
+                throw;
+            }
+        }
+
+        private async Task GetOrderSummaryAsync()
+        {
+            try
+            {
+                var summary = await _customerService.GetOrderSummaryAsync();
+                Completed = summary.Completed;
+                Prep = summary.Prep;
+                Resent = summary.Resent;
+                Sent = summary.Sent;
+                ShopName = summary.ShopName;
+                Total = summary.Total;
+            }
+            catch (Exception ex)
+            {
+                await _pageService.DisplayAlert("Error", $"{nameof(GetOrderSummaryAsync)}|message: {ex.Message}", "Close");
+                throw;
+            }
+        }
+
+        public override async Task InitializeAsync(object parameter)
+        {
+            await GetOrderItemsAsync();
+            await GetOrderSummaryAsync();
+            //HubConnection = new HubConnectionBuilder()
+            //    .WithUrl($"{Constant.ApiBaseUrl}/hub/customer")
+            //    .ConfigureLogging(logging =>
+            //    {
+            //        logging.AddFilter("SignalR", LogLevel.Debug);
+            //    })
+            //    .Build();
+            //HubOn();
+        }
+
+        private async Task SendMessageAsync(OrderItem orderItem)
+        {
+            try
+            {
+                var updatedItem = await _customerService.SendSMSAsync(orderItem);
+                OrderItems.Remove(orderItem);
+                OrderItems.Add(updatedItem);
+            }
+            catch (Exception ex)
+            {
+                await _pageService.DisplayAlert("Error", $"{nameof(SendMessageAsync)}|message: {ex.Message}", "Close");
+                throw;
+            }
+        }
+
+        private async Task SummaryAsync(MessageStatus status)
+        {
+            try
+            {
+                OrderItems.Clear();
+                var orderItems = await _customerService.GetOrderItemsByMessageStatus(status);
+                foreach (var orderItem in orderItems)
+                {
+                    OrderItems.Add(orderItem);
+                }
+                await GetOrderSummaryAsync();
+            }
+            catch (Exception ex)
+            {
+                await _pageService.DisplayAlert("Error", $"{nameof(SummaryAsync)}|message: {ex.Message}", "Close");
+                throw;
+            }
+        }
+        
+        public void SelectedItemList(OrderItem item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+        }
+      
+        public void ApplyQueryAttributes(IDictionary<string, string> query)
+        {
+            if (!query.Any())
+            {
+                return;
+            }
+            string orderNo = HttpUtility.UrlDecode(query["orderNo"]);
+            Task.Run(async () => await LoadCustomer(orderNo));
+        }
+
+        private async Task LoadCustomer(string orderNo)
+        {
+            try
+            {
+                var customer = await _customerService.GetCustomerByOrderNoAsync(orderNo);
+                var orderItem = OrderItems.FirstOrDefault(x => x.CustomerId == customer.CustomerId);
+                if (orderItem != null) OrderItems.Remove(orderItem);
+                OrderItems.Insert(0, orderItem);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private void HubOn()
@@ -124,9 +242,8 @@ namespace ep.Mobile.PageModels
             {
                 return;
             }
-            _hubConnection.On<string>($"NewCustomerShop{shop.ShopId}", (item) =>
+            HubConnection.On<string>($"NewCustomerShop{shop.ShopId}", (item) =>
             {
-                
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     try
@@ -140,19 +257,17 @@ namespace ep.Mobile.PageModels
                             {
                                 CreatedOn = customer.CreatedOn,
                                 CustomerId = customer.Id,
-                                MessageStatus = customer.LatestedMessageStatus,
+                                MessageStatus = customer.MessageStatus,
                                 MessageCreatedOn = customer.UpdatedOn ?? customer.CreatedOn,
                                 Mobile = customer.Mobile,
                                 Name = customer.Name,
                                 OrderNo = customer.OrderNo,
                                 //ShowCloseButton = false,
                                 //ShowSMSButton = true
-                                SMSParam = new SmsParam
-                                {
-                                    CustomerId = customer.Id,
-                                    ShopId = customer.ShopId,
-                                    MessageStatus = customer.LatestedMessageStatus
-                                }
+                                //{
+                                //CustomerId = customer.Id,
+                                //MessageStatus = customer.MessageStatus
+                                //}
                             };
 
                             OrderItems.Insert(0, newItem);
@@ -163,156 +278,30 @@ namespace ep.Mobile.PageModels
                     }
                 });
             });
-            _hubConnection.StartAsync();
+            HubConnection.StartAsync();
         }
 
-        public async Task ExecuteLoadItemsCommand()
-        {
-            //if (IsBusy)
-            //    return;
-            //IsBusy = true;
-            try
-            {
-                if (!_connected)
-                    await _hubConnection.StartAsync();
+        //public async Task ExecuteLoadItemsCommand()
+        //{
+        //    //if (IsBusy)
+        //    //    return;
+        //    //IsBusy = true;
+        //    try
+        //    {
+        //        if (!_connected)
+        //            await _hubConnection.StartAsync();
 
-                _connected = true;
-                await App.Current.MainPage.DisplayAlert("", "Connected", "Cancel");
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            finally
-            {
-                //_connected = false;
-            }
-        }
-                
-        private async Task GetSummary()
-        {
-            try
-            {
-                var shop = await App.Database.GetShopAsync();
-                _shopName = shop.Name;
-
-                var messages = await App.Database.GetMessagesAsync();
-                _completed = messages.Count(m => m.Status == MessageStatus.Completed);
-                _prep = OrderItems.Count(o => o.MessageStatus == MessageStatus.Prep);
-                _sent = messages.Count(m => m.Status == MessageStatus.Sent);
-                _resent = messages.Count(m => m.Status == MessageStatus.Resent);
-                _total = _completed + _prep + _sent + _resent;
-            }
-            catch (Exception ex)
-            {
-                await App.Current.MainPage.DisplayAlert("Error", ex.Message, "Close");
-                throw;
-            }
-        }      
-
-        private async Task SendMessageAsync(SmsParam param)
-        {
-            try
-            {
-                var currentItem = OrderItems.FirstOrDefault(o => o.CustomerId == param.CustomerId);
-                var updatedItem = await _customerService.SendSMSAsync(param);
-                OrderItems.Remove(currentItem);
-                OrderItems.Add(updatedItem);
-            }
-            catch (Exception ex)
-            {
-                await App.Current.MainPage.DisplayAlert("Error", ex.Message, "Close");
-                throw;
-            }
-        }
-
-        private async Task GetOrdersByMessageStatus(MessageStatus status)
-        {
-            try
-            {
-                OrderItems.Clear();
-                var items = status == MessageStatus.Other ?
-                    OrderItems :
-                    OrderItems.Where(o => o.MessageStatus == status);
-                //var items = await _customerService.GetCustomerOrdersByMessageStatus(status);
-                foreach (var item in items)
-                {
-                    OrderItems.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                await App.Current.MainPage.DisplayAlert("Error", ex.Message, "Close");
-                throw;
-            }
-        }
-
-        private async Task CloseOrderItem(SmsParam param)
-        {
-            try
-            {
-                param.MessageStatus = MessageStatus.Completed;
-                await SendMessageAsync(param);
-                var item = OrderItems.FirstOrDefault(o => o.CustomerId == param.CustomerId);
-                OrderItems.Remove(item);
-            }
-            catch (Exception ex)
-            {
-                await App.Current.MainPage.DisplayAlert("Error", ex.Message, "Close");
-                throw;
-            }
-        }
-
-        public void SelectedItemList(OrderItem item)
-        {
-            if (item == null)
-            {
-                return;
-            }
-        }
-      
-        public async Task OnAppearing()
-        {
-            await _hubConnection.StartAsync();
-        }
-
-        public void ApplyQueryAttributes(IDictionary<string, string> query)
-        {
-            if (!query.Any())
-            {
-                return;
-            }
-            string orderNo = HttpUtility.UrlDecode(query["orderNo"]);            
-            Task.Run(async () => await LoadCustomer(orderNo));
-        }
-
-        private async Task LoadCustomer(string orderNo)
-        {
-            try
-            {
-                var customer = await _customerService.GetCustomerByOrderNoAsync(orderNo);
-                var newItem = new OrderItem
-                {
-                    CreatedOn = customer.CreatedOn,
-                    CustomerId = customer.Id,
-                    MessageStatus = customer.LatestedMessageStatus,
-                    MessageCreatedOn = customer.UpdatedOn ?? customer.CreatedOn,
-                    Mobile = customer.Mobile,
-                    Name = customer.Name,
-                    OrderNo = customer.OrderNo,
-                    SMSParam = new SmsParam
-                    {
-                        CustomerId = customer.Id,
-                        ShopId = customer.ShopId,
-                        MessageStatus = customer.LatestedMessageStatus
-                    }
-                };
-                OrderItems.Insert(0, newItem);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //        _connected = true;
+        //        await App.Current.MainPage.DisplayAlert("", "Connected", "Cancel");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        //_connected = false;
+        //    }
+        //}
     }
 }

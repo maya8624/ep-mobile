@@ -1,28 +1,25 @@
-﻿using System.Threading.Tasks;
-using ep.Mobile.Models;
-using Xamarin.Forms;
+﻿using ep.Mobile.Crypto;
+using ep.Mobile.Dtos;
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Interfaces.IRepos;
 using ep.Mobile.Interfaces.IAPIs;
+using ep.Mobile.Models;
+using ep.Mobile.Reference;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using ep.Mobile.Dtos;
-using Newtonsoft.Json;
-using ep.Mobile.Crypto;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace ep.Mobile.Services
 {
     public class ShopService : IShopService
     {
         private readonly IAPIService _apiService;
-        private readonly IShopRepo _shopRepo;
-        private const string _createEndPoint = "api/shop/create";
-        private const string _updateEndPoint = "api/shop/update";
 
         public ShopService()
         {
-            _shopRepo = DependencyService.Get<IShopRepo>();
             _apiService = DependencyService.Get<IAPIService>();
         }
 
@@ -30,6 +27,31 @@ namespace ep.Mobile.Services
         {
             var encrypt = CryptoService.Encrypt(key, text);
             return encrypt;
+        }
+        
+        public async Task CreateShopAsync(Shop shop)
+        {
+            try
+            {
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    //TODO: don't need get shopId replaced with GUID, change api
+                    //var request = await _apiService.PostAsync(shop, Constant.CreateShopEndpoint);
+                    //if (!string.IsNullOrEmpty(request))
+                    //{
+                    //    //TODO: custom exception
+                    //    throw new Exception("No data returned from the server.");
+                    //}
+                    
+                    //var response = JsonConvert.DeserializeObject<ShopResponse>(request);
+                    //await SecureStorage.SetAsync(Constant.SymKey, response.Key);
+                }
+                await App.Database.SaveShopAsync(shop);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<Shop> GetShopAsync()
@@ -39,36 +61,30 @@ namespace ep.Mobile.Services
 
         public async Task<List<Shop>> GetShopsAsync()
         {
-            return await _shopRepo.GetShopsAsync();
+            return await App.Database.GetShopsAsync();
         }
 
-        public async Task CreateShopAsync(Shop shop)
+        //TODO: test this function
+        public async Task UpdateShopAsync(Shop shop)
         {
             try
             {
-                var response = await _apiService.PostAsync(shop, _createEndPoint);
-                if (!string.IsNullOrEmpty(response))
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    //TODO: show error                
+                    //TODO: Use "Put"
+                    var request = await _apiService.PostAsync(shop, Constant.UpdateShopEndpoint);
+                    if (!string.IsNullOrEmpty(request))
+                    {
+                        //TODO: custom exception
+                        throw new Exception("No data returned from the server.");
+                    }
                 }
-
-                var shopResponse = JsonConvert.DeserializeObject<ShopResponse>(response);
-                await SecureStorage.SetAsync("symKey", shopResponse.Key);
-                shop.ShopId = shopResponse.ShopId;
-                await App.Database.SaveShopAsync(shop);
+                await App.Database.UpdateShopAsync(shop);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
+                throw;
             }
-        }
-
-        public async Task UpdateShopAsync(Shop shop)
-        { 
-            await _shopRepo.UpdateShopAsync(shop);
-            //await _apiService.PostAsync(shop, _createEndPoint);
-            // TODO: update shop data on server
-            //await _apiService.PutAsync(shop, _updateEndPoint);
         }
     }
 }

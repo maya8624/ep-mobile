@@ -36,5 +36,10 @@ namespace ep.Mobile.PageModels.Base
             OnPropertyChanged(propertyName);
             return true;
         }
+
+        public virtual Task InitializeAsync(object parameter)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

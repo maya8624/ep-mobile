@@ -13,6 +13,8 @@ namespace ep.Mobile.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
+        public MessageStatus MessageStatus { get; set; } = MessageStatus.Prep;
+
         public string Mobile { get; set; } = string.Empty;
 
         public string Name { get; set; } = string.Empty;
@@ -20,10 +22,6 @@ namespace ep.Mobile.Models
         public string OrderNo { get; set; } = string.Empty;
 
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Active;
-
-        public MessageStatus LatestedMessageStatus { get; set; } = MessageStatus.Prep;
-
-        public int ShopId { get; set; }
 
         public DateTimeOffset CreatedOn { get; set; } = DateTimeOffset.UtcNow;
         
