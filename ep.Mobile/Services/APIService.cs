@@ -48,6 +48,10 @@ namespace ep.Mobile.Services
                 var apiUrl = $"{Constant.ApiBaseUrl}/{endPoint}";
                 var content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
                 var response = await _client.PostAsync(apiUrl, content);
+                if (response.IsSuccessStatusCode is false)
+                {
+                    throw new Exception("An error occurred while saving in the server");
+                }
                 var result = await response.Content.ReadAsStringAsync();
                 return result;
             }

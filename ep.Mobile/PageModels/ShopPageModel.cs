@@ -34,13 +34,6 @@ namespace ep.Mobile.PageModels
             set => SetProperty(ref _address, value);
         }
 
-        //private string _email;
-        //public string Email
-        //{
-        //    get => _email;
-        //    set => SetProperty(ref _email, value);
-        //}
-        
         private string _name;
         public string Name
         {
@@ -106,12 +99,11 @@ namespace ep.Mobile.PageModels
         {
             try
             {
-                var shop = await App.Database.GetShopAsync();
+                var shop = await _shopService.GetShopAsync();
                 if (shop != null)
                 {
                     ABN = shop.ABN;
                     Address = shop.Address;
-                    //Email = shop.Email;
                     Name = shop.Name;
                     Owner = shop.Owner;
                     Phone = shop.Phone;
@@ -142,7 +134,7 @@ namespace ep.Mobile.PageModels
                     Phone = Phone,
                 };
                 
-                var local = await App.Database.GetShopAsync();
+                var local = await _shopService.GetShopAsync();
                 if (local == null)
                 {                    
                     await _shopService.CreateShopAsync(shop);
@@ -152,7 +144,7 @@ namespace ep.Mobile.PageModels
                 {
                     shop.Id = local.Id;
                     shop.UpdatedOn = DateTimeOffset.UtcNow;
-                    await App.Database.UpdateShopAsync(shop);
+                    await _shopService.UpdateShopAsync(shop);
                 }
                 // This will pop the current page off the navigation stack
                 await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");

@@ -39,8 +39,8 @@
                                    PlaceholderColor="#696966"
                                    HeightRequest="45"
                                    WidthRequest="350"/>
-                <ctr:EntryOutlined Text="{Binding Telephone, Mode=TwoWay}" 
-                                   Placeholder="Telephone" 
+                <ctr:EntryOutlined Text="{Binding Phone, Mode=TwoWay}" 
+                                   Placeholder="Phone" 
                                    PlaceholderColor="#696966" 
                                    WidthRequest="350"
                                    HeightRequest="45"/>

@@ -14,15 +14,13 @@ namespace ep.Mobile.Models
         [MaxLength(200)]
         public string Address { get; set; }
 
-        //public string Email { get; set; }
-
         [MaxLength(100)]
         public string Name { get; set; }
         
         [MaxLength(100)]
         public string Owner { get; set; }
 
-        public int ShopId { get; set; }
+        public Guid ShopId { get; set; } = Guid.NewGuid();
 
         [MaxLength(50)]
         public string Phone { get; set; }

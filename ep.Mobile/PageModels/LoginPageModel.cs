@@ -16,13 +16,14 @@ namespace ep.Mobile.PageModels
         private readonly IPageService _pageService;
         private readonly IShopService _shopService;
         private string _email = "maya8624@hotmail.com";
+        
         public string Email
         {
             get => _email;
             set => SetProperty(ref _email, value);
         }
 
-        private string _password;
+        private string _password = "1234";
         public string Password
         {
             get => _password;
@@ -72,10 +73,11 @@ namespace ep.Mobile.PageModels
                     await _pageService.DisplayAlert("Info", "Password doen't match", "OK");
                     return;
                 }
-                var shop = await App.Database.GetShopAsync();
+                //TODO: don't need???
+                var shop = await _shopService.GetShopAsync();
                 if (shop == null)
                 {
-                    await _pageService.DisplayAlert("Info", "Please save your shop information. Tap Shop", "OK");
+                    await _pageService.DisplayAlert("Info", "Please save your shop information.", "OK");
                     await Shell.Current.GoToAsync($"//{nameof(ShopPage)}");
                     return;
                 }

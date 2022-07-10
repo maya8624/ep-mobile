@@ -1,11 +1,11 @@
-﻿using MvvmHelpers.Commands;
-using System;
-using System.Threading.Tasks;
+﻿using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
-using ep.Mobile.Interfaces.IServices;
-using Xamarin.Forms;
 using ep.Mobile.Pages;
+using MvvmHelpers.Commands;
+using System;
+using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ep.Mobile.PageModels
 {
@@ -74,11 +74,10 @@ namespace ep.Mobile.PageModels
                 {
                     Name = _name,
                     Mobile = _mobile,
-                    OrderNo = _orderNo,
-                    ShopId = 4//TODO:change to shopId
+                    OrderNo = _orderNo
                 };
-                ResetEntries();
                 await _customerService.SaveCustomer(customer);
+                ResetEntries();
                 await Shell.Current.GoToAsync($"//{nameof(OrderPage)}?orderNo={customer.OrderNo}");
             }
             catch (Exception ex)
