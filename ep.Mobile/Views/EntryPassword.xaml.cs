@@ -5,15 +5,15 @@ using Xamarin.Forms.Xaml;
 namespace ep.Mobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EntryOutlined : ContentView
+    public partial class EntryPassword : ContentView
     {
-        public EntryOutlined()
+        public EntryPassword()
         {
             InitializeComponent();
         }
 
         public static readonly BindableProperty TextProperty =
-           BindableProperty.Create(nameof(Text), typeof(string), typeof(EntryOutlined), null);
+           BindableProperty.Create(nameof(Text), typeof(string), typeof(EntryPassword), null);
 
         public string Text
         {
@@ -22,7 +22,7 @@ namespace ep.Mobile.Views
         }
 
         public static readonly BindableProperty PlaceholderProperty =
-            BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(EntryOutlined), null);
+            BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(EntryPassword), null);
 
         public string Placeholder
         {
@@ -31,7 +31,7 @@ namespace ep.Mobile.Views
         }
 
         public static readonly BindableProperty PlaceholderColorProperty =
-            BindableProperty.Create(nameof(PlaceholderColor), typeof(Color), typeof(EntryOutlined), Color.Blue);
+            BindableProperty.Create(nameof(PlaceholderColor), typeof(Color), typeof(EntryPassword), Color.Blue);
 
         public Color PlaceholderColor
         {
@@ -40,7 +40,7 @@ namespace ep.Mobile.Views
         }
 
         public static readonly BindableProperty BorderColorProperty =
-            BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(EntryOutlined), Color.Blue);
+            BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(EntryPassword), Color.Blue);
 
         public Color BorderColor
         {
@@ -49,7 +49,7 @@ namespace ep.Mobile.Views
         }
 
         public static readonly BindableProperty IsPasswordProperty =
-            BindableProperty.Create(nameof(IsPassword), typeof(bool), typeof(EntryOutlined), false);
+           BindableProperty.Create(nameof(IsPassword), typeof(bool), typeof(EntryOutlined), true);
 
         public bool IsPassword
         {

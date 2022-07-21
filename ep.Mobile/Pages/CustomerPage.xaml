@@ -5,6 +5,7 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              xmlns:ctr="clr-namespace:ep.Mobile.Views;assembly=ep.Mobile"
              x:Class="ep.Mobile.Pages.CustomerPage"
+             Shell.FlyoutBehavior="Flyout"
              Title="Register a customer">
     <ContentPage.BindingContext>
         <vm:CustomerPageModel/>

@@ -33,16 +33,24 @@
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
     </ShellItem>
-    <ShellItem Route="RegisterPage" FlyoutItemIsVisible="False">
+    <!--<ShellItem Route="RegisterPage" FlyoutItemIsVisible="False">
         <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate pages:RegisterPage}" />
-    </ShellItem>
+    </ShellItem>-->
+    <FlyoutItem Title="Edit Shop" Icon="icon_about.png" Route="ShopPage">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate pages:ShopPage}" />            
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Register" Icon="icon_about.png" Route="RegisterPage">
+        <ShellContent ContentTemplate="{DataTemplate pages:RegisterPage}" />
+    </FlyoutItem>
     <TabBar>
-        <!--<ShellContent Title="Login" FlyoutItem.IsVisible="False" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:LoginPage}" />-->
+        <!--<ShellContent Title="Login" FlyoutItem.IsVisible="True" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:LoginPage}" />-->
         <!--<ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />-->
         <!--<ShellContent Route ="WeatherPage" Title="Weather" Icon="icon_about.png" ContentTemplate="{DataTemplate local:AutoComplete}" />-->
         <ShellContent Route="OrderPage" Title="Orders" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:OrderPage}" />
         <ShellContent Route="CustomerPage" Title="Customer" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:CustomerPage}" />
-        <ShellContent Route="ShopPage" Title="Shop" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:ShopPage}" />
+        <ShellContent Route="ShopPage" Title="Shop" Icon="icon_about.png" IsVisible="False" ContentTemplate="{DataTemplate pages:ShopPage}" />
     </TabBar>
     <!--
         If you would like to navigate to this content you can do so by calling

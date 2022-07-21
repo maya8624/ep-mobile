@@ -1,6 +1,7 @@
 ﻿using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
+using ep.Mobile.Reference;
 using ep.Mobile.Utils;
 using ep.Mobile.Views;
 using MvvmHelpers.Commands;
@@ -34,6 +35,13 @@ namespace ep.Mobile.PageModels
             set => SetProperty(ref _address, value);
         }
 
+        private string _email;
+        public string Email
+        {
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
         private string _name;
         public string Name
         {
@@ -46,6 +54,20 @@ namespace ep.Mobile.PageModels
         {
             get => _owner;
             set => SetProperty(ref _owner, value);
+        }
+
+        private string _password;
+        public string Password
+        {
+            get => _password;
+            set => SetProperty(ref _password, value);
+        }
+
+        private string _confirmPassword;
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set => SetProperty(ref _confirmPassword, value);
         }
 
         private string _phone;
@@ -104,6 +126,7 @@ namespace ep.Mobile.PageModels
                 {
                     ABN = shop.ABN;
                     Address = shop.Address;
+                    Email = shop.Email;
                     Name = shop.Name;
                     Owner = shop.Owner;
                     Phone = shop.Phone;
@@ -125,10 +148,12 @@ namespace ep.Mobile.PageModels
             try
             {
                 if (!await ValidateEntriesAsync()) return;
+                await SaveCredentialsAsync();
                 var shop = new Shop
                 {
                     ABN = ABN,
                     Address = Address,
+                    Email = Email,
                     Name = Name,
                     Owner = Owner,
                     Phone = Phone,
@@ -136,9 +161,8 @@ namespace ep.Mobile.PageModels
                 
                 var local = await _shopService.GetShopAsync();
                 if (local == null)
-                {                    
+                {
                     await _shopService.CreateShopAsync(shop);
-                    //var pass = CreateTempPassword();
                 }
                 else
                 {
@@ -156,7 +180,21 @@ namespace ep.Mobile.PageModels
                 throw;
             }
         }
-                
+
+        private async Task SaveCredentialsAsync()
+        {
+            try
+            {
+                // TODO: Apply Cryptography
+                await SecureStorage.SetAsync(Constant.StorageEmailKey, Email);
+                await SecureStorage.SetAsync(Constant.StoragePasswordKey, Password);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         private async Task<bool> ValidateEntriesAsync()
         {
             var result = false;
@@ -179,6 +217,22 @@ namespace ep.Mobile.PageModels
             else if (string.IsNullOrEmpty(Phone))
             {
                 await _pageService.DisplayAlert("Info", "Please enter phone", "OK");
+            }
+            else if (string.IsNullOrEmpty(Email))
+            {
+                await _pageService.DisplayAlert("Info", "Please enter email", "OK");
+            }
+            else if (string.IsNullOrEmpty(Password))
+            {
+                await _pageService.DisplayAlert("Info", "Please enter password", "OK");
+            }
+            else if (string.IsNullOrEmpty(ConfirmPassword))
+            {
+                await _pageService.DisplayAlert("Info", "Please confirmPassword", "OK");
+            }
+            else if (!Password.Equals(ConfirmPassword))
+            {
+                await _pageService.DisplayAlert("Info", "Password doen't match", "OK");
             }
             else
             {

@@ -130,17 +130,47 @@ namespace ep.Mobile.Services
                 throw;
             }
         }
-      
-        public async Task<OrderItem> SendSMSAsync(OrderItem orderItem)
+
+        private async Task SenSmsOniOSAsync(string message, string mobile)
+        {
+            try
+            {
+                var sms = new SmsMessage(message, mobile);
+                await Sms.ComposeAsync(sms);
+            }
+            catch (FeatureNotSupportedException)
+            {
+                throw new FeatureNotSupportedException("Sms is not supported on this device.");
+            }
+            catch (Exception)
+            {
+                throw new Exception("Other error has occurred.");
+            }
+        }
+
+        public async Task<OrderItem> SendSmsAsync(OrderItem orderItem, DevicePlatform platform)
         {
             try
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
+                    var updatedItem = new OrderItem();
                     var message = CreateMessage(orderItem);
-                    await SendMessageAsync(orderItem.Mobile, message.Text);
+                    if (platform == DevicePlatform.iOS)
+                    {
+                        await SenSmsOniOSAsync(orderItem.Mobile, message.Text);
+                    }
+                    else if (platform == DevicePlatform.Android)
+                    {
+                        await SendMessageAsync(orderItem.Mobile, message.Text);
+                    }
+                    else 
+                    {
+                        throw new Exception("Message is not sent on this device.");
+                    }
+                      
+                    //TODO: put it a separate method
                     await App.Database.SaveMessageAsync(message);
-
                     var customer = await App.Database.GetCustomerByIdAsync(orderItem.CustomerId);
                     customer.UpdatedOn = message.CreatedOn;
                     customer.MessageStatus = message.Status;
@@ -153,7 +183,7 @@ namespace ep.Mobile.Services
                     orderItem.ShowCloseButton = true;
                     orderItem.Text = message.Text;
                     scope.Complete();
-                }                
+                }
                 return orderItem;
             }
             catch (Exception)
