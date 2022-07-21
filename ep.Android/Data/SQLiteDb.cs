@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using SQLite;
-using ep.Android.Droid.Persistent;
 using Xamarin.Forms;
 using ep.Mobile.Interfaces.IRepos;
 using Xamarin.Essentials;
+using ep.Android.Droid.Data;
 
 [assembly: Dependency(typeof(SQLiteDb))]
-namespace ep.Android.Droid.Persistent
+namespace ep.Android.Droid.Data
 {
 	public class SQLiteDb : ISQLiteDb
 	{

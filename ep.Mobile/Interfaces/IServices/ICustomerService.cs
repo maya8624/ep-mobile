@@ -2,6 +2,7 @@
 using ep.Mobile.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace ep.Mobile.Interfaces.IServices
 {
@@ -14,6 +15,6 @@ namespace ep.Mobile.Interfaces.IServices
         Task<Customer> GetCustomerByIdAsync(int id);
         Task<OrderItem> GetCustomerByOrderNoAsync(string orderNo);
         Task SaveCustomer(Customer customer);
-        Task<OrderItem> SendSMSAsync(OrderItem orderItem);
+        Task<OrderItem> SendSmsAsync(OrderItem orderItem, DevicePlatform platform);
     }
 }

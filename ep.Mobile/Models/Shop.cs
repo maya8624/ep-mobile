@@ -15,6 +15,9 @@ namespace ep.Mobile.Models
         public string Address { get; set; }
 
         [MaxLength(100)]
+        public string Email { get; set; }
+
+        [MaxLength(100)]
         public string Name { get; set; }
         
         [MaxLength(100)]

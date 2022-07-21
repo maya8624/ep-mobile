@@ -9,6 +9,6 @@ namespace ep.Mobile.Controls
 {
     public class BorderlessEntry : Entry
     {
-
+        
     }
 }

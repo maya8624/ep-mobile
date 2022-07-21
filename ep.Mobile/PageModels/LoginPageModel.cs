@@ -1,4 +1,5 @@
 ﻿using ep.Mobile.Interfaces.IServices;
+using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
 using ep.Mobile.Pages;
 using ep.Mobile.Reference;
@@ -37,10 +38,35 @@ namespace ep.Mobile.PageModels
             _shopService = DependencyService.Get<IShopService>();
         }
 
+        public override async Task InitializeAsync(object parameter)
+        {
+            await GetShopAsync();
+            await base.InitializeAsync(parameter);
+        }
+
+        private async Task GetShopAsync()
+        {
+            var shop = await _shopService.GetShopAsync();
+            if (shop == null)
+            {
+                await _pageService.DisplayAlert("Info", "Please save your shop information to use the app", "OK");
+                await Shell.Current.GoToAsync($"//{nameof(ShopPage)}");
+                return;
+            }
+        }
+
         private async Task LoginAsync()
         {
             try
             {
+                var shop = await _shopService.GetShopAsync();
+                if (shop == null)
+                {
+                    await _pageService.DisplayAlert("Info", "Please save your shop information to use the app", "OK");
+                    await Shell.Current.GoToAsync($"//{nameof(ShopPage)}");
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(Email))
                 {
                     await _pageService.DisplayAlert("Info", "Please enter your email", "OK");
@@ -73,15 +99,7 @@ namespace ep.Mobile.PageModels
                     await _pageService.DisplayAlert("Info", "Password doen't match", "OK");
                     return;
                 }
-                //TODO: don't need???
-                var shop = await _shopService.GetShopAsync();
-                if (shop == null)
-                {
-                    await _pageService.DisplayAlert("Info", "Please save your shop information.", "OK");
-                    await Shell.Current.GoToAsync($"//{nameof(ShopPage)}");
-                    return;
-                }
-
+                
                 await Shell.Current.GoToAsync($"//{nameof(OrderPage)}");
                 //await Navigation.NavigateToAsync($"{nameof(LiveViewModel)}?name={Name}");
             }

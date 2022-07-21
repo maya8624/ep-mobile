@@ -21,7 +21,7 @@ namespace ep.Mobile.PageModels
         private readonly ICustomerService _customerService;
         private readonly IPageService _pageService;
         private bool _connected;
-        public AsyncCommand<OrderItem> CloseComand { get; private set; }
+        public AsyncCommand<OrderItem> CloseCommand { get; private set; }
         private HubConnection HubConnection { get; set; }
         public ObservableCollection<OrderItem> OrderItems { get; private set; } = new ObservableCollection<OrderItem>();
         public AsyncCommand<OrderItem> SMSCommand { get; private set; }
@@ -95,7 +95,7 @@ namespace ep.Mobile.PageModels
             _currentDate = DateTime.Now.ToString("MMM dd, yyyy");
             _customerService = DependencyService.Get<ICustomerService>();
             _pageService = DependencyService.Get<IPageService>();
-            CloseComand = new AsyncCommand<OrderItem>(CloseAsync);
+            CloseCommand = new AsyncCommand<OrderItem>(CloseAsync);
             SummaryCommand = new AsyncCommand<MessageStatus>(SummaryAsync);
             SMSCommand = new AsyncCommand<OrderItem>(SendMessageAsync);
         }
@@ -105,7 +105,8 @@ namespace ep.Mobile.PageModels
             try
             {
                 orderItem.MessageStatus = MessageStatus.Completed;
-                await _customerService.SendSMSAsync(orderItem);
+                await _customerService.SendSmsAsync(orderItem, DeviceInfo.Platform);
+
                 OrderItems.Remove(orderItem);
             }
             catch (Exception ex)
@@ -172,7 +173,7 @@ namespace ep.Mobile.PageModels
         {
             try
             {
-                var updatedItem = await _customerService.SendSMSAsync(orderItem);
+                var updatedItem = await _customerService.SendSmsAsync(orderItem, DeviceInfo.Platform);
                 OrderItems.Remove(orderItem);
                 OrderItems.Add(updatedItem);
             }
@@ -262,12 +263,6 @@ namespace ep.Mobile.PageModels
                                 Mobile = customer.Mobile,
                                 Name = customer.Name,
                                 OrderNo = customer.OrderNo,
-                                //ShowCloseButton = false,
-                                //ShowSMSButton = true
-                                //{
-                                //CustomerId = customer.Id,
-                                //MessageStatus = customer.MessageStatus
-                                //}
                             };
 
                             OrderItems.Insert(0, newItem);

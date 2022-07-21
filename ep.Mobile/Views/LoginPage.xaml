@@ -33,20 +33,20 @@
                     </Label.GestureRecognizers>
                 </Label>
             </StackLayout>
-            <StackLayout>
-                <Label Text="Registor"                   
-                        x:Name="RegistrationBtn"
-                        FontAttributes="Bold"
-                        FontSize="15"
-                        TextColor="#fff"
-                        Margin="5" 
-                        HorizontalTextAlignment="Center"
-                        TextDecorations="Underline">
+            <!--<StackLayout>
+                <Label Text="Register"
+                       x:Name="RegistrationBtn"
+                       FontAttributes="Bold"
+                       FontSize="15"
+                       TextColor="#fff"
+                       Margin="5" 
+                       HorizontalTextAlignment="Center"
+                       TextDecorations="Underline">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                     </Label.GestureRecognizers>
                 </Label>
-            </StackLayout>
+            </StackLayout>-->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

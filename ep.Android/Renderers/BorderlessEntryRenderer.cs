@@ -22,10 +22,6 @@ namespace ep.Android.Renderers
                 Control.Background = null;
                 //Control.SetBackgroundColor(global::Android.Graphics.Color.LightGray);
             }
-
-            if (e.NewElement != null)
-            {
-            }
         }
     }
 }

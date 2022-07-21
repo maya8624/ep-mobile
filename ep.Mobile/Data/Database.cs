@@ -13,9 +13,9 @@ namespace ep.Mobile.Data
         public Database(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);
-            _database.CreateTableAsync<Customer>();
-            _database.CreateTableAsync<Message>();
-            _database.CreateTableAsync<Shop>();
+            _database.CreateTableAsync<Customer>().Wait();
+            _database.CreateTableAsync<Message>().Wait();
+            _database.CreateTableAsync<Shop>().Wait();
         }
 
         public async Task DeleteAllCustomersAsync()
@@ -41,6 +41,10 @@ namespace ep.Mobile.Data
             if (status != MessageStatus.Other)
             {
                 results = results?.Where(x => x.MessageStatus == status);
+            }
+            else
+            {
+                results = results?.Where(x => x.MessageStatus != MessageStatus.Completed);
             }
             return await results
                 ?.OrderByDescending(x => x.OrderNo)

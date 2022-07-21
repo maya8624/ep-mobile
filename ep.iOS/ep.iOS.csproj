@@ -72,7 +72,7 @@
     <Compile Include="Renderers\BorderlessEntryRenderer.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
-    <Compile Include="Persistent\SQLiteDb.cs" />
+    <Compile Include="Data\SQLiteDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

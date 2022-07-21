@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using SQLite;
-using ep.iOS.Persistent;
+using ep.iOS.Data;
 using Xamarin.Forms;
 using ep.Mobile.Interfaces.IRepos;
 using Xamarin.Essentials;
 
 [assembly: Dependency(typeof(SQLiteDb))]
-namespace ep.iOS.Persistent
+namespace ep.iOS.Data
 {
     public class SQLiteDb : ISQLiteDb
     {
