@@ -180,7 +180,7 @@ namespace ep.Mobile.Services
                     orderItem.Icon = message.Icon;
                     orderItem.MessageCreatedOn = message.CreatedOn;
                     orderItem.MessageStatus = message.Status;
-                    orderItem.ShowCloseButton = true;
+                    //orderItem.ShowCloseButton = true;
                     orderItem.Text = message.Text;
                     scope.Complete();
                 }
