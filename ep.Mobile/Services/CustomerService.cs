@@ -60,6 +60,19 @@ namespace ep.Mobile.Services
             }
         }
 
+        public async Task<int> GetLatestOrderNumberAsync()
+        {
+            try
+            {
+                var customer = await App.Database.GetLatestCustomerAsync();
+                return customer == null ? 0 : Convert.ToInt16(customer.OrderNo);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<OrderItem>> GetOrderItemsAsync()
         {
             try
@@ -106,8 +119,8 @@ namespace ep.Mobile.Services
             {
                 throw;
             }
-        }
-        
+        }       
+
         public async Task<Summary> GetOrderSummaryAsync()
         {
             try
@@ -245,7 +258,7 @@ namespace ep.Mobile.Services
             var message = new Message
             {
                 CustomerId = orderItem.CustomerId,
-                CreatedOn = DateTimeOffset.UtcNow,
+                CreatedOn = DateTime.Now,
                 OrderNo = orderItem.OrderNo,
                 Text = $"Order No: {orderItem.OrderNo} is ready to pick up!!"
             };

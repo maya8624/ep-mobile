@@ -12,11 +12,11 @@ namespace ep.Mobile.Models
         [PrimaryKey, AutoIncrement]
         public string Email { get; set; }
         
-        public DateTimeOffset CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         
         // Should be hashed
         public string Password { get; set; }
         
-        public DateTimeOffset UpdatedOn { get; set; }
+        public DateTime UpdatedOn { get; set; }
     }
 }

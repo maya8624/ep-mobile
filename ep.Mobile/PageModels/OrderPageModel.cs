@@ -23,6 +23,7 @@ namespace ep.Mobile.PageModels
         private bool _connected;
         public AsyncCommand<OrderItem> CompleteCommand { get; private set; }
         public AsyncCommand<OrderItem> DeleteCommand { get; private set; }
+        public AsyncCommand RefreshCommand { get; private set; }
         private HubConnection HubConnection { get; set; }
         public ObservableCollection<OrderItem> OrderItems { get; private set; } = new ObservableCollection<OrderItem>();
         public AsyncCommand<OrderItem> SMSCommand { get; private set; }
@@ -90,7 +91,14 @@ namespace ep.Mobile.PageModels
             get => _showSMS;
             set => SetProperty(ref _showSMS, value);
         }
-                
+
+        public bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get => _isRefreshing;
+            set => SetProperty(ref _isRefreshing, value);
+        }
+
         public OrderPageModel()
         {
             _currentDate = DateTime.Now.ToString("MMM dd, yyyy");
@@ -98,6 +106,7 @@ namespace ep.Mobile.PageModels
             _pageService = DependencyService.Get<IPageService>();
             CompleteCommand = new AsyncCommand<OrderItem>(CompleteAsync);
             DeleteCommand = new AsyncCommand<OrderItem>(DeleteAsync);
+            RefreshCommand = new AsyncCommand(RefreshAsync);
             SummaryCommand = new AsyncCommand<MessageStatus>(SummaryAsync);
             SMSCommand = new AsyncCommand<OrderItem>(SendMessageAsync);
         }
@@ -121,6 +130,14 @@ namespace ep.Mobile.PageModels
         {
             try
             {
+                var result = await _pageService.DisplayAlert
+                (
+                    "Info",
+                    $"Are you sure you want to delete this order:{orderItem.OrderNo}?",
+                    "OK",
+                    "Close"
+                );
+                if (!result) return;
                 await _customerService.UpdateCustomerAsync(orderItem.CustomerId);
                 OrderItems.Remove(orderItem);
                 await SummaryAsync(MessageStatus.Other);
@@ -173,8 +190,8 @@ namespace ep.Mobile.PageModels
 
         public override async Task InitializeAsync(object parameter)
         {
-            await GetOrderItemsAsync();
-            await GetOrderSummaryAsync();
+            await InitLoadAsync();
+
             //HubConnection = new HubConnectionBuilder()
             //    .WithUrl($"{Constant.ApiBaseUrl}/hub/customer")
             //    .ConfigureLogging(logging =>
@@ -185,14 +202,27 @@ namespace ep.Mobile.PageModels
             //HubOn();
         }
 
+        private async Task InitLoadAsync()
+        {
+            await GetOrderItemsAsync();
+            await GetOrderSummaryAsync();
+        }
+
+        private async Task RefreshAsync()
+        {
+            IsRefreshing = true;
+            await InitLoadAsync();
+            IsRefreshing = false;
+        }
+
         private async Task SendMessageAsync(OrderItem orderItem)
         {
             try
             {
                 var result = await _pageService.DisplayAlert
                 (
-                    "Warnning", 
-                    $"Are you sure you want to send a message for Order No:{orderItem.OrderNo}?", 
+                    "Info", 
+                    $"Are you sure you want to send a message for order no:{orderItem.OrderNo}?", 
                     "OK", 
                     "Close"
                 );
@@ -243,19 +273,19 @@ namespace ep.Mobile.PageModels
                 return;
             }
             string orderNo = HttpUtility.UrlDecode(query["orderNo"]);
-            Task.Run(async () => await LoadCustomer(orderNo));
+            Task.Run(async () => await LoadCustomerAsync(orderNo));
         }
 
-        private async Task LoadCustomer(string orderNo)
+        private async Task LoadCustomerAsync(string orderNo)
         {
             try
             {
-                var customer = await _customerService.GetCustomerByOrderNoAsync(orderNo);
-                var orderItem = OrderItems.FirstOrDefault(x => x.CustomerId == customer.CustomerId);
+                var newOrderItem = await _customerService.GetCustomerByOrderNoAsync(orderNo);
+                var orderItem = OrderItems.FirstOrDefault(x => x.CustomerId == newOrderItem.CustomerId);
                 if (orderItem != null) OrderItems.Remove(orderItem);
-                OrderItems.Insert(0, orderItem);
+                OrderItems.Insert(0, newOrderItem);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

@@ -28,8 +28,8 @@ namespace ep.Mobile.Models
         [MaxLength(50)]
         public string Phone { get; set; }
 
-        public DateTimeOffset CreatedOn { get; set; } = DateTimeOffset.UtcNow;
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
 
-        public DateTimeOffset? UpdatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
     }
 }

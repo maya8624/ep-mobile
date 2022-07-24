@@ -69,12 +69,12 @@ namespace ep.Mobile.Views
 
         private async Task TranslateLabelToTitle()
         {
-            if (string.IsNullOrEmpty(this.Text))
-            {
+            //if (string.IsNullOrEmpty(this.Text))
+            //{
                 var placeHolder = this.PlaceHolderLabel;
                 var distance = GetPlaceholderDistance(placeHolder);
                 await placeHolder.TranslateTo(0, -distance);
-            }
+            //}            
         }
 
         private async Task TranslateLabelToPlaceHolder()

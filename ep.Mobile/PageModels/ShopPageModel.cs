@@ -167,7 +167,7 @@ namespace ep.Mobile.PageModels
                 else
                 {
                     shop.Id = local.Id;
-                    shop.UpdatedOn = DateTimeOffset.UtcNow;
+                    shop.UpdatedOn = DateTime.Now;
                     await _shopService.UpdateShopAsync(shop);
                 }
                 await _pageService.DisplayAlert("Info", "Shop information saved", "OK");

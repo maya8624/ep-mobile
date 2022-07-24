@@ -63,6 +63,14 @@ namespace ep.Mobile.Data
                 ?.ToListAsync();
         }
 
+        public async Task<Customer> GetLatestCustomerAsync()
+        {
+            return await _database
+                ?.Table<Customer>()
+                ?.OrderByDescending(x => x.OrderNo)
+                ?.FirstOrDefaultAsync();
+        }
+
         public async Task<int> SaveCustomerAsync(Customer customer)
         {
             return await _database.InsertAsync(customer);

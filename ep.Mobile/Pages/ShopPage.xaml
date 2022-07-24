@@ -17,7 +17,7 @@
         <StackLayout Spacing="3" 
                      VerticalOptions="CenterAndExpand"
                      HorizontalOptions="CenterAndExpand"
-                     WidthRequest="350">
+                     WidthRequest="350">            
             <StackLayout HorizontalOptions="CenterAndExpand">
                 <ctr:EntryOutlined Text="{Binding ABN, Mode=TwoWay}"
                                    Placeholder="ABN"

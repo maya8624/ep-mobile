@@ -23,7 +23,7 @@ namespace ep.Mobile.Models
 
         public int CustomerId { get; set; }
 
-        public DateTimeOffset CreatedOn { get; set; }        
+        public DateTime CreatedOn { get; set; }        
     }
 }
 

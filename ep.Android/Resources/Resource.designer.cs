@@ -22122,34 +22122,34 @@ namespace ep.Droid
 			public const int cloudiness = 2131165287;
 			
 			// aapt resource value: 0x7F070068
-			public const int completed100 = 2131165288;
+			public const int completed50 = 2131165288;
 			
 			// aapt resource value: 0x7F070069
-			public const int completed50 = 2131165289;
+			public const int dashboard = 2131165289;
 			
 			// aapt resource value: 0x7F07006A
-			public const int dashboard = 2131165290;
+			public const int design_fab_background = 2131165290;
 			
 			// aapt resource value: 0x7F07006B
-			public const int design_fab_background = 2131165291;
+			public const int design_ic_visibility = 2131165291;
 			
 			// aapt resource value: 0x7F07006C
-			public const int design_ic_visibility = 2131165292;
+			public const int design_ic_visibility_off = 2131165292;
 			
 			// aapt resource value: 0x7F07006D
-			public const int design_ic_visibility_off = 2131165293;
+			public const int design_password_eye = 2131165293;
 			
 			// aapt resource value: 0x7F07006E
-			public const int design_password_eye = 2131165294;
+			public const int design_snackbar_background = 2131165294;
 			
 			// aapt resource value: 0x7F07006F
-			public const int design_snackbar_background = 2131165295;
+			public const int double_down_48 = 2131165295;
 			
 			// aapt resource value: 0x7F070070
-			public const int double_down_48 = 2131165296;
+			public const int enter = 2131165296;
 			
 			// aapt resource value: 0x7F070071
-			public const int enter = 2131165297;
+			public const int form = 2131165297;
 			
 			// aapt resource value: 0x7F070072
 			public const int green_arrow = 2131165298;
@@ -22305,52 +22305,49 @@ namespace ep.Droid
 			public const int ok48 = 2131165348;
 			
 			// aapt resource value: 0x7F0700A5
-			public const int outline_loop_24 = 2131165349;
+			public const int overlay = 2131165349;
 			
 			// aapt resource value: 0x7F0700A6
-			public const int overlay = 2131165350;
+			public const int place = 2131165350;
 			
 			// aapt resource value: 0x7F0700A7
-			public const int place = 2131165351;
+			public const int preference_list_divider_material = 2131165351;
 			
 			// aapt resource value: 0x7F0700A8
-			public const int preference_list_divider_material = 2131165352;
+			public const int pressure = 2131165352;
 			
 			// aapt resource value: 0x7F0700A9
-			public const int pressure = 2131165353;
+			public const int red_arrow = 2131165353;
 			
 			// aapt resource value: 0x7F0700AA
-			public const int red_arrow = 2131165354;
+			public const int restaurant = 2131165354;
 			
 			// aapt resource value: 0x7F0700AB
-			public const int restaurant = 2131165355;
+			public const int sms = 2131165355;
 			
 			// aapt resource value: 0x7F0700AC
-			public const int sms = 2131165356;
+			public const int sms_48 = 2131165356;
 			
 			// aapt resource value: 0x7F0700AD
-			public const int sms_48 = 2131165357;
+			public const int test_custom_background = 2131165357;
 			
 			// aapt resource value: 0x7F0700AE
-			public const int test_custom_background = 2131165358;
+			public const int tick = 2131165358;
 			
 			// aapt resource value: 0x7F0700AF
-			public const int tick = 2131165359;
+			public const int tooltip_frame_dark = 2131165359;
 			
 			// aapt resource value: 0x7F0700B0
-			public const int tooltip_frame_dark = 2131165360;
+			public const int tooltip_frame_light = 2131165360;
 			
 			// aapt resource value: 0x7F0700B1
-			public const int tooltip_frame_light = 2131165361;
+			public const int weather = 2131165361;
 			
 			// aapt resource value: 0x7F0700B2
-			public const int weather = 2131165362;
+			public const int wind = 2131165362;
 			
 			// aapt resource value: 0x7F0700B3
-			public const int wind = 2131165363;
-			
-			// aapt resource value: 0x7F0700B4
-			public const int xamarin_logo = 2131165364;
+			public const int xamarin_logo = 2131165363;
 			
 			static Drawable()
 			{

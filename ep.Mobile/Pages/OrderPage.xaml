@@ -13,7 +13,10 @@
         <vm:OrderPageModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid VerticalOptions="FillAndExpand">
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}"
+                     RefreshColor="#2196F3">            
+            <Grid VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -113,7 +116,6 @@
                             Grid.Row="3"
                             ItemsSource="{Binding OrderItems}" 
                             Margin="10" 
-                            SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                             EmptyView="No items to display">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
@@ -238,5 +240,6 @@
                 </CollectionView.Footer>-->
             </CollectionView>
         </Grid>
-    </ContentPage.Content>    
+        </RefreshView>
+    </ContentPage.Content>
 </ContentPage> 

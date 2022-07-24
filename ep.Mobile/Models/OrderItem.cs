@@ -5,13 +5,13 @@ namespace ep.Mobile.Models
 {
     public class OrderItem
     {
-        public DateTimeOffset CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public int CustomerId { get; set; }
 
         public string Icon { get; set; }
         
-        public DateTimeOffset MessageCreatedOn { get; set; }
+        public DateTime MessageCreatedOn { get; set; }
         
         public MessageStatus MessageStatus { get; set; }
 

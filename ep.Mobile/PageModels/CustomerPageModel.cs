@@ -37,15 +37,41 @@ namespace ep.Mobile.PageModels
             set => SetProperty(ref _orderNo, value);
         }
 
+        private string _latestOrderNo;
+        public string LatestOrderNo
+        {
+            get => _latestOrderNo;
+            set => SetProperty(ref _latestOrderNo, value);
+        }
+
         public CustomerPageModel()
         {
-            SaveCommand = new AsyncCommand(OnSave);
+            SaveCommand = new AsyncCommand(SaveAsync);
             _customerService = DependencyService.Get<ICustomerService>();
             _pageService = DependencyService.Get<IPageService>();
             _shopService = DependencyService.Get<IShopService>();
         }
 
-        private async Task OnSave()
+        public override async Task InitializeAsync(object parameter)
+        {
+            await GetNewOrderNumberAsync();
+        }
+
+        private async Task GetNewOrderNumberAsync()
+        {
+            try
+            {
+                var latestOrderNo = await _customerService.GetLatestOrderNumberAsync();
+                LatestOrderNo = latestOrderNo.ToString();
+            }
+            catch (Exception ex)
+            {
+                await _pageService.DisplayAlert("Error", $"{nameof(GetNewOrderNumberAsync)}|message: {ex.Message}", "Close");
+                throw;
+            }
+        }
+
+        private async Task SaveAsync()
         {
             try
             {

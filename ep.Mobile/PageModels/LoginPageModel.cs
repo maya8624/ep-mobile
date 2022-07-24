@@ -41,7 +41,7 @@ namespace ep.Mobile.PageModels
         public override async Task InitializeAsync(object parameter)
         {
             await GetShopAsync();
-            await base.InitializeAsync(parameter);
+            //await base.InitializeAsync(parameter);
         }
 
         private async Task GetShopAsync()

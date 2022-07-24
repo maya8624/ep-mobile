@@ -114,9 +114,6 @@
     <AndroidResource Include="Resources\drawable\android.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\outline_loop_24.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\loop_48.png" />
   </ItemGroup>
   <ItemGroup>
@@ -216,7 +213,7 @@
     <AndroidResource Include="Resources\drawable\completed50.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\completed100.png" />
+    <AndroidResource Include="Resources\drawable\form.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

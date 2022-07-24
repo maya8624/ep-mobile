@@ -6,23 +6,38 @@
              xmlns:ctr="clr-namespace:ep.Mobile.Views;assembly=ep.Mobile"
              x:Class="ep.Mobile.Pages.CustomerPage"
              Shell.FlyoutBehavior="Flyout"
-             Title="Register a customer">
+             Title="Add a customer">
     <ContentPage.BindingContext>
         <vm:CustomerPageModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="CenterAndExpand" WidthRequest="355">
-            <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,10">
-                <Label Text="{Binding ShopName}" FontSize="25" FontAttributes="Bold" VerticalOptions="Center" TextColor="White"/>
-                <Label Text="{Binding CurrentDate}" Padding="5,5,0,0" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="White"/>
+        <StackLayout HorizontalOptions="CenterAndExpand" WidthRequest="355">        
+            <StackLayout>
+                <Image Aspect="AspectFit" Source="form.png" HeightRequest="200" />
             </StackLayout>
             <StackLayout>
-                <ctr:EntryOutlined Placeholder="Name" PlaceholderColor="#898f8a" HeightRequest="45" Text="{Binding Name, Mode=TwoWay}" />
-                    <ctr:EntryOutlined Placeholder="Mobile" PlaceholderColor="#898f8a" BorderColor="#2196F3" HeightRequest="45" Text="{Binding Mobile, Mode=TwoWay}" />
-                <ctr:EntryOutlined Placeholder="Order No" PlaceholderColor="#898f8a" BorderColor="#2196F3" HeightRequest="45" Text="{Binding OrderNo, Mode=TwoWay}" />             
+                <StackLayout Orientation="Horizontal" Padding="5,0,0,0">
+                    <Label FontSize="15" Text="Latest Order No:"/>
+                    <Label FontSize="15" TextColor="OrangeRed" Text="{Binding LatestOrderNo}"/>
+                    
+                </StackLayout>
+                <ctr:EntryOutlined x:Name="orderNo" Placeholder="Order No" 
+                                   PlaceholderColor="#898f8a" 
+                                   BorderColor="#2196F3" 
+                                   HeightRequest="45" 
+                                   Text="{Binding OrderNo, Mode=TwoWay}" />
+                <ctr:EntryOutlined Placeholder="Name" 
+                                   PlaceholderColor="#898f8a" 
+                                   HeightRequest="45" 
+                                   Text="{Binding Name, Mode=TwoWay}" />
+                <ctr:EntryOutlined Placeholder="Mobile" 
+                                   PlaceholderColor="#898f8a" 
+                                   BorderColor="#2196F3" 
+                                   HeightRequest="45"
+                                   Text="{Binding Mobile, Mode=TwoWay}" />
             </StackLayout>
             <StackLayout Orientation="Horizontal">
-                <Button Text="Create" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand" 
+                <Button Text="Add" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand" 
                         CornerRadius="5"
                         Margin="0,10,0,0"/>
             </StackLayout>
