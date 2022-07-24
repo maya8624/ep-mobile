@@ -12,6 +12,8 @@ namespace ep.Mobile.Models
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
+        
+        public bool Inactive { get; set; } = false;
 
         public MessageStatus MessageStatus { get; set; } = MessageStatus.Prep;
 

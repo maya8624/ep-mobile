@@ -21,7 +21,7 @@ namespace ep.Mobile.PageModels
         private readonly ICustomerService _customerService;
         private readonly IPageService _pageService;
         private bool _connected;
-        public AsyncCommand<OrderItem> CloseCommand { get; private set; }
+        public AsyncCommand<OrderItem> CompleteCommand { get; private set; }
         public AsyncCommand<OrderItem> DeleteCommand { get; private set; }
         private HubConnection HubConnection { get; set; }
         public ObservableCollection<OrderItem> OrderItems { get; private set; } = new ObservableCollection<OrderItem>();
@@ -96,24 +96,23 @@ namespace ep.Mobile.PageModels
             _currentDate = DateTime.Now.ToString("MMM dd, yyyy");
             _customerService = DependencyService.Get<ICustomerService>();
             _pageService = DependencyService.Get<IPageService>();
-            CloseCommand = new AsyncCommand<OrderItem>(CloseAsync);
+            CompleteCommand = new AsyncCommand<OrderItem>(CompleteAsync);
             DeleteCommand = new AsyncCommand<OrderItem>(DeleteAsync);
             SummaryCommand = new AsyncCommand<MessageStatus>(SummaryAsync);
             SMSCommand = new AsyncCommand<OrderItem>(SendMessageAsync);
         }
 
-        private async Task CloseAsync(OrderItem orderItem)
+        private async Task CompleteAsync(OrderItem orderItem)
         {
             try
             {
                 orderItem.MessageStatus = MessageStatus.Completed;
                 await _customerService.SendSmsAsync(orderItem, DeviceInfo.Platform);
-
                 OrderItems.Remove(orderItem);
             }
             catch (Exception ex)
             {
-                await _pageService.DisplayAlert("Error", $"{nameof(CloseAsync)}|message: {ex.Message}", "Close");
+                await _pageService.DisplayAlert("Error", $"{nameof(CompleteAsync)}|message: {ex.Message}", "Close");
                 throw;
             }
         }
@@ -122,9 +121,9 @@ namespace ep.Mobile.PageModels
         {
             try
             {
-                orderItem.MessageStatus = MessageStatus.Completed;
-                await _customerService.SendSmsAsync(orderItem, DeviceInfo.Platform);
+                await _customerService.UpdateCustomerAsync(orderItem.CustomerId);
                 OrderItems.Remove(orderItem);
+                await SummaryAsync(MessageStatus.Other);
             }
             catch (Exception ex)
             {
@@ -190,9 +189,18 @@ namespace ep.Mobile.PageModels
         {
             try
             {
+                var result = await _pageService.DisplayAlert
+                (
+                    "Warnning", 
+                    $"Are you sure you want to send a message for Order No:{orderItem.OrderNo}?", 
+                    "OK", 
+                    "Close"
+                );
+                if (!result) return;
                 var updatedItem = await _customerService.SendSmsAsync(orderItem, DeviceInfo.Platform);
                 OrderItems.Remove(orderItem);
                 OrderItems.Add(updatedItem);
+                await SummaryAsync(MessageStatus.Other);
             }
             catch (Exception ex)
             {

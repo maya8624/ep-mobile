@@ -59,13 +59,7 @@ namespace ep.Mobile.PageModels
         {
             try
             {
-                var shop = await _shopService.GetShopAsync();
-                if (shop == null)
-                {
-                    await _pageService.DisplayAlert("Info", "Please save your shop information to use the app", "OK");
-                    await Shell.Current.GoToAsync($"//{nameof(ShopPage)}");
-                    return;
-                }
+                await GetShopAsync();
 
                 if (string.IsNullOrEmpty(Email))
                 {

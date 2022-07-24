@@ -208,6 +208,20 @@ namespace ep.Mobile.Services
             }
         }
 
+        public async Task UpdateCustomerAsync(int id)
+        {
+            try
+            {
+                var customer = await App.Database.GetCustomerByIdAsync(id);
+                customer.Inactive = true;
+                await App.Database.UpdateCustomerAsync(customer);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         private async Task SendMessageAsync(string mobile, string text)
         {
             try

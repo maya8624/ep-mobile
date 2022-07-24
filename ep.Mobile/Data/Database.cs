@@ -22,7 +22,7 @@ namespace ep.Mobile.Data
         {
             await _database.DeleteAllAsync<Customer>();
         }
-
+               
         public async Task<Customer> GetCustomerByIdAsync(int id)
         {
             return await _database.Table<Customer>().FirstOrDefaultAsync(x => x.Id == id);
@@ -37,7 +37,9 @@ namespace ep.Mobile.Data
          
         public async Task<IEnumerable<Customer>> GetCustomersByMessageStatus(MessageStatus status)
         {
-            var results = _database?.Table<Customer>();
+            var results = _database
+                ?.Table<Customer>()
+                ?.Where(x => x.Inactive == false);
             if (status != MessageStatus.Other)
             {
                 results = results?.Where(x => x.MessageStatus == status);
@@ -55,8 +57,9 @@ namespace ep.Mobile.Data
         {
             return await _database
                 ?.Table<Customer>()
-                ?.Where(c => c.OrderStatus == status)
-                ?.OrderByDescending(c => c.OrderNo)
+                ?.Where(x => x.OrderStatus == status)
+                ?.Where(x => x.Inactive == false)
+                ?.OrderByDescending(x => x.OrderNo)
                 ?.ToListAsync();
         }
 
@@ -67,7 +70,10 @@ namespace ep.Mobile.Data
 
         public async Task<IEnumerable<Customer>> GetCustomersAsync()
         {
-            return await _database.Table<Customer>().ToListAsync();
+            return await _database
+                ?.Table<Customer>()
+                ?.Where(x => x.Inactive == false)
+                ?.ToListAsync();
         }
 
         public async Task<int> UpdateCustomerAsync(Customer customer)

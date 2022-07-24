@@ -57,6 +57,7 @@
                 </ctr:EntryOutlined>
                 <ctr:EntryPassword Text="{Binding Password, Mode=TwoWay}" 
                                    IsPassword="True"
+                                   Placeholder="Password"
                                    PlaceholderColor="#696966" 
                                    WidthRequest="350"
                                    HeightRequest="45"/>

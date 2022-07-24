@@ -170,6 +170,7 @@ namespace ep.Mobile.PageModels
                     shop.UpdatedOn = DateTimeOffset.UtcNow;
                     await _shopService.UpdateShopAsync(shop);
                 }
+                await _pageService.DisplayAlert("Info", "Shop information saved", "OK");
                 // This will pop the current page off the navigation stack
                 await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
             }

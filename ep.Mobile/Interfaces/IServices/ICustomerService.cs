@@ -16,5 +16,6 @@ namespace ep.Mobile.Interfaces.IServices
         Task<OrderItem> GetCustomerByOrderNoAsync(string orderNo);
         Task SaveCustomer(Customer customer);
         Task<OrderItem> SendSmsAsync(OrderItem orderItem, DevicePlatform platform);
+        Task UpdateCustomerAsync(int id);
     }
 }
