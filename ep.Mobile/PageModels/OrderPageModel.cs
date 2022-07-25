@@ -71,11 +71,11 @@ namespace ep.Mobile.PageModels
             set => SetProperty(ref _total, value);
         }
 
-        private string _shopName;
-        public string ShopName
+        private string _businessName;
+        public string BusinessName
         {
-            get => _shopName;
-            set => SetProperty(ref _shopName, value);
+            get => _businessName;
+            set => SetProperty(ref _businessName, value);
         }
 
         private bool _showClose;
@@ -178,7 +178,7 @@ namespace ep.Mobile.PageModels
                 Prep = summary.Prep;
                 Resent = summary.Resent;
                 Sent = summary.Sent;
-                ShopName = summary.ShopName;
+                BusinessName = summary.BusinessName;
                 Total = summary.Total;
             }
             catch (Exception ex)
@@ -222,12 +222,13 @@ namespace ep.Mobile.PageModels
                 var result = await _pageService.DisplayAlert
                 (
                     "Info", 
-                    $"Are you sure you want to send a message for order no:{orderItem.OrderNo}?", 
+                    $"Are you sure you want to send a message to {orderItem.Name}?", 
                     "OK", 
                     "Close"
                 );
                 if (!result) return;
                 var updatedItem = await _customerService.SendSmsAsync(orderItem, DeviceInfo.Platform);
+                await _pageService.DisplayAlert("Success", $"Message sent to {orderItem.Name}", "Close");
                 OrderItems.Remove(orderItem);
                 OrderItems.Add(updatedItem);
                 await SummaryAsync(MessageStatus.Other);

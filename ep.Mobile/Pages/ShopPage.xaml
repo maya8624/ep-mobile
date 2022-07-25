@@ -6,7 +6,7 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              x:Class="ep.Mobile.Pages.ShopPage"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             Title="Save shop information"
+             Title="Save business information"
              Shell.TabBarIsVisible="False"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true">
@@ -18,7 +18,7 @@
                      VerticalOptions="CenterAndExpand"
                      HorizontalOptions="CenterAndExpand"
                      WidthRequest="350">            
-            <StackLayout HorizontalOptions="CenterAndExpand">
+            <StackLayout HorizontalOptions="CenterAndExpand" Margin="5">
                 <ctr:EntryOutlined Text="{Binding ABN, Mode=TwoWay}"
                                    Placeholder="ABN"
                                    PlaceholderColor="#898f8a" 
@@ -30,8 +30,8 @@
                                    BorderColor="#696966" 
                                    HeightRequest="45"
                                    WidthRequest="350" />
-                <ctr:EntryOutlined Text="{Binding Name, Mode=TwoWay}" 
-                                   Placeholder="Shop Name" 
+                <ctr:EntryOutlined Text="{Binding BusinessName, Mode=TwoWay}" 
+                                   Placeholder="Business Name" 
                                    PlaceholderColor="#696966"
                                    HeightRequest="45"
                                    WidthRequest="350" />

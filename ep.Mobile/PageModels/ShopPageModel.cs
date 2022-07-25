@@ -42,11 +42,11 @@ namespace ep.Mobile.PageModels
             set => SetProperty(ref _email, value);
         }
 
-        private string _name;
-        public string Name
+        private string _businessName;
+        public string BusinessName
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
+            get => _businessName;
+            set => SetProperty(ref _businessName, value);
         }
 
         private string _owner;
@@ -127,18 +127,18 @@ namespace ep.Mobile.PageModels
                     ABN = shop.ABN;
                     Address = shop.Address;
                     Email = shop.Email;
-                    Name = shop.Name;
+                    BusinessName = shop.BusinessName;
                     Owner = shop.Owner;
                     Phone = shop.Phone;
                 }
                 else
                 {
-                    await _pageService.DisplayAlert("Info", $"Shop Information is not found", "OK");
+                    await _pageService.DisplayAlert("Info", $"Business Information is not found", "OK");
                 }
             }
             catch (Exception)
             {
-                await _pageService.DisplayAlert("Error", "can't get the shop details", "Cancel");
+                await _pageService.DisplayAlert("Error", "can't get the business details", "Cancel");
                 throw;
             }
         }
@@ -154,7 +154,7 @@ namespace ep.Mobile.PageModels
                     ABN = ABN,
                     Address = Address,
                     Email = Email,
-                    Name = Name,
+                    BusinessName = BusinessName,
                     Owner = Owner,
                     Phone = Phone,
                 };
@@ -170,7 +170,7 @@ namespace ep.Mobile.PageModels
                     shop.UpdatedOn = DateTime.Now;
                     await _shopService.UpdateShopAsync(shop);
                 }
-                await _pageService.DisplayAlert("Info", "Shop information saved", "OK");
+                await _pageService.DisplayAlert("Info", "Business information saved", "OK");
                 // This will pop the current page off the navigation stack
                 await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
             }
@@ -207,9 +207,9 @@ namespace ep.Mobile.PageModels
             {
                 await _pageService.DisplayAlert("Info", "Please enter address", "OK");
             }
-            else if (string.IsNullOrEmpty(Name))
+            else if (string.IsNullOrEmpty(BusinessName))
             {
-                await _pageService.DisplayAlert("Info", "Please enter name", "OK");
+                await _pageService.DisplayAlert("Info", "Please enter bussiness name", "OK");
             }
             else if (string.IsNullOrEmpty(Owner))
             {

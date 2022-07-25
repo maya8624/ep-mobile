@@ -25,7 +25,7 @@
             </Grid.RowDefinitions>
             <StackLayout HeightRequest="110" BackgroundColor="#2196F3">
                 <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,10">
-                    <Label Text="{Binding ShopName}" FontSize="25" FontAttributes="Bold" VerticalOptions="Center" TextColor="White"/>
+                    <Label Text="{Binding BusinessName}" FontSize="25" FontAttributes="Bold" VerticalOptions="Center" TextColor="White"/>
                     <Label Text="{Binding CurrentDate}" Padding="5,5,0,0" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="White"/>
                 </StackLayout>  
             </StackLayout>

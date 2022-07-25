@@ -133,7 +133,7 @@ namespace ep.Mobile.Services
                     Prep = customers.Count(x => x.MessageStatus == MessageStatus.Prep),
                     Resent = customers.Count(x => x.MessageStatus == MessageStatus.Resent),
                     Sent = customers.Count(x => x.MessageStatus == MessageStatus.Sent),
-                    ShopName = shop.Name,
+                    BusinessName = shop.BusinessName,
                     Total = customers.Count()
                 };
                 return summary;
@@ -168,7 +168,7 @@ namespace ep.Mobile.Services
                 using (TransactionScope scope = new TransactionScope())
                 {
                     var updatedItem = new OrderItem();
-                    var message = CreateMessage(orderItem);
+                    var message = await CreateMessage(orderItem);
                     if (platform == DevicePlatform.iOS)
                     {
                         await SenSmsOniOSAsync(orderItem.Mobile, message.Text);
@@ -253,14 +253,15 @@ namespace ep.Mobile.Services
             }
         }
 
-        private Message CreateMessage(OrderItem orderItem)
+        private async Task<Message> CreateMessage(OrderItem orderItem)
         {
+            var shop = await App.Database.GetShopAsync();
             var message = new Message
             {
                 CustomerId = orderItem.CustomerId,
                 CreatedOn = DateTime.Now,
                 OrderNo = orderItem.OrderNo,
-                Text = $"Order No: {orderItem.OrderNo} is ready to pick up!!"
+                Text = $"{shop.BusinessName}: your order [{orderItem.OrderNo}] is ready to pick up!!"
             };
 
             switch (orderItem.MessageStatus)
