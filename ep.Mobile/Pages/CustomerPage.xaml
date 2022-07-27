@@ -16,10 +16,10 @@
                 <Image Aspect="AspectFit" Source="form.png" HeightRequest="200" />
             </StackLayout>
             <StackLayout>
+                <ActivityIndicator Color="#2196F3" IsRunning="{Binding IsRunning}"/>
                 <StackLayout Orientation="Horizontal" Padding="5,0,0,0">
                     <Label FontSize="15" Text="Latest Order No:"/>
-                    <Label FontSize="15" TextColor="OrangeRed" Text="{Binding LatestOrderNo}"/>
-                    
+                    <Label FontSize="15" TextColor="OrangeRed" Text="{Binding LatestOrderNo}"/>                    
                 </StackLayout>
                 <ctr:EntryOutlined x:Name="orderNo" Placeholder="Order No" 
                                    PlaceholderColor="#898f8a" 

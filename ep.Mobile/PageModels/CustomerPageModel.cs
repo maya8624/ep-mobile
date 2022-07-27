@@ -15,7 +15,21 @@ namespace ep.Mobile.PageModels
         private readonly IShopService _shopService;
         private readonly IPageService _pageService;
         public AsyncCommand SaveCommand { get; private set; }
-             
+
+        private bool _isRunning;
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetProperty(ref _isRunning, value);
+        }
+
+        private string _latestOrderNo;
+        public string LatestOrderNo
+        {
+            get => _latestOrderNo;
+            set => SetProperty(ref _latestOrderNo, value);
+        }
+
         private string _name;
         public string Name
         {
@@ -36,14 +50,7 @@ namespace ep.Mobile.PageModels
             get => _orderNo;
             set => SetProperty(ref _orderNo, value);
         }
-
-        private string _latestOrderNo;
-        public string LatestOrderNo
-        {
-            get => _latestOrderNo;
-            set => SetProperty(ref _latestOrderNo, value);
-        }
-
+                
         public CustomerPageModel()
         {
             SaveCommand = new AsyncCommand(SaveAsync);
@@ -102,8 +109,11 @@ namespace ep.Mobile.PageModels
                     Mobile = _mobile,
                     OrderNo = _orderNo
                 };
+                IsRunning = true;
                 await _customerService.SaveCustomer(customer);
+                IsRunning = false;
                 ResetEntries();
+
                 await Shell.Current.GoToAsync($"//{nameof(OrderPage)}?orderNo={customer.OrderNo}");
             }
             catch (Exception ex)

@@ -111,7 +111,8 @@
                 <Entry Placeholder="Enter Order No" WidthRequest="200" Keyboard="Numeric" />
                 <ImageButton x:Name="GridBtn" Source="enter.png" WidthRequest="45" HeightRequest="45" BackgroundColor="Transparent"/>
             </StackLayout>-->
-            <CollectionView x:Name="listOrders" 
+                <ActivityIndicator Color="#2196F3" IsRunning="{Binding IsRunning}"/>
+                <CollectionView x:Name="listOrders" 
                             HorizontalOptions="CenterAndExpand"
                             Grid.Row="3"
                             ItemsSource="{Binding OrderItems}" 

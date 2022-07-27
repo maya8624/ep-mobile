@@ -13,11 +13,11 @@
     <ContentPage.BindingContext>
         <vm:ShopPageModel/>
     </ContentPage.BindingContext>
-    <ContentPage.Content>
+    <ContentPage.Content>        
         <StackLayout Spacing="3" 
                      VerticalOptions="CenterAndExpand"
                      HorizontalOptions="CenterAndExpand"
-                     WidthRequest="350">            
+                     WidthRequest="350">
             <StackLayout HorizontalOptions="CenterAndExpand" Margin="5">
                 <ctr:EntryOutlined Text="{Binding ABN, Mode=TwoWay}"
                                    Placeholder="ABN"
@@ -67,7 +67,7 @@
                                    PlaceholderColor="#696966" 
                                    WidthRequest="350"
                                    HeightRequest="45"/>
-            </StackLayout>
+            </StackLayout>            
             <StackLayout Orientation="Horizontal">
                 <Button Text="Save" 
                         Command="{Binding SaveCommand}" 

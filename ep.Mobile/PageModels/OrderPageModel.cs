@@ -99,6 +99,13 @@ namespace ep.Mobile.PageModels
             set => SetProperty(ref _isRefreshing, value);
         }
 
+        private bool _isRunning;
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetProperty(ref _isRunning, value);
+        }
+
         public OrderPageModel()
         {
             _currentDate = DateTime.Now.ToString("MMM dd, yyyy");
@@ -204,8 +211,10 @@ namespace ep.Mobile.PageModels
 
         private async Task InitLoadAsync()
         {
+            IsRunning = true;
             await GetOrderItemsAsync();
             await GetOrderSummaryAsync();
+            IsRunning = false;
         }
 
         private async Task RefreshAsync()
