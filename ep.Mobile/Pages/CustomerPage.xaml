@@ -13,7 +13,7 @@
     <ContentPage.Content>
         <StackLayout HorizontalOptions="CenterAndExpand" WidthRequest="355">        
             <StackLayout>
-                <Image Aspect="AspectFit" Source="form.png" HeightRequest="200" />
+                <Image Aspect="AspectFit" Source="form.png" HeightRequest="100" />
             </StackLayout>
             <StackLayout>
                 <ActivityIndicator Color="#2196F3" IsRunning="{Binding IsRunning}"/>
@@ -36,6 +36,9 @@
                                    HeightRequest="45"
                                    Text="{Binding Mobile, Mode=TwoWay}" />
             </StackLayout>
+            
+            <Label TextColor="Red" Text="{Binding ValidateMessage, Mode=TwoWay}"/>
+
             <StackLayout Orientation="Horizontal">
                 <Button Text="Add" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand" 
                         CornerRadius="5"

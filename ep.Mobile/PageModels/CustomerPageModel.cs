@@ -1,9 +1,13 @@
-﻿using ep.Mobile.Interfaces.IServices;
+﻿using ep.Mobile.Extensions;
+using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
 using ep.Mobile.Pages;
+using ep.Mobile.Validations;
 using MvvmHelpers.Commands;
 using System;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -11,6 +15,7 @@ namespace ep.Mobile.PageModels
 {
     public class CustomerPageModel : PageModelBase
     {
+        private readonly CustomerValidation _validation;
         private readonly ICustomerService _customerService;
         private readonly IShopService _shopService;
         private readonly IPageService _pageService;
@@ -50,13 +55,21 @@ namespace ep.Mobile.PageModels
             get => _orderNo;
             set => SetProperty(ref _orderNo, value);
         }
-                
+
+        private string _validateMessage;
+        public string ValidateMessage
+        {
+            get => _validateMessage;
+            set => SetProperty(ref _validateMessage, value);
+        }
+
         public CustomerPageModel()
         {
             SaveCommand = new AsyncCommand(SaveAsync);
             _customerService = DependencyService.Get<ICustomerService>();
             _pageService = DependencyService.Get<IPageService>();
             _shopService = DependencyService.Get<IShopService>();
+            _validation = new CustomerValidation();
         }
 
         public override async Task InitializeAsync(object parameter)
@@ -82,33 +95,27 @@ namespace ep.Mobile.PageModels
         {
             try
             {
-                if (string.IsNullOrEmpty(Name))
+                var validation = await _validation.ValidateAsync(this);
+                if (validation.IsValid is false)
                 {
-                    await _pageService.DisplayAlert("Validation", "Name is required", "Ok");
+                    ValidateMessage = validation.GetErrorMesages();
                     return;
                 }
-                if (string.IsNullOrEmpty(Mobile))
-                {
-                    await _pageService.DisplayAlert("Validation", "Mobile is required", "Ok");
-                    return;
-                }
-                if (string.IsNullOrEmpty(OrderNo))
-                {
-                    await _pageService.DisplayAlert("Validation", "Order No is required", "Ok");
-                    return;
-                }
+               
                 var shop = await _shopService.GetShopAsync();
                 if (shop == null)
                 {
-                    await _pageService.DisplayAlert("Validation", "There is no shop details", "Ok");
+                    ValidateMessage = "There is no shop details";
                     return;
                 }
+
                 var customer = new Customer
                 {
                     Name = _name,
                     Mobile = _mobile,
                     OrderNo = _orderNo
                 };
+                
                 IsRunning = true;
                 await _customerService.SaveCustomer(customer);
                 IsRunning = false;
