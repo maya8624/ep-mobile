@@ -1,11 +1,12 @@
-﻿<?xml version="1.0" 
-    encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ep.Mobile.PageModels"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:converters="clr-namespace:ep.Mobile.Converters;assembly=ep.Mobile"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ep.Mobile.Views.LoginPage"
              Shell.FlyoutBehavior="Disabled"
              Shell.NavBarIsVisible="False"
@@ -13,14 +14,44 @@
     <ContentPage.BindingContext>
         <vm:LoginPageModel/>
     </ContentPage.BindingContext>
+    <ContentPage.Resources>        
+        <ResourceDictionary>
+            <!--<converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />-->
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red" />
+        </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout Padding="10,300,10,-20">            
             <StackLayout VerticalOptions="Center">
-                <Entry x:Name="id" Placeholder="Email" PlaceholderColor="White" Text="{Binding Email}" TextColor="White" />
+                <Entry x:Name="id" 
+                       Placeholder="Email" 
+                       PlaceholderColor="White" 
+                       Text="{Binding Email, Mode=TwoWay}" 
+                       TextColor="White" >
+                    <Entry.Behaviors>
+                        <!--<xct:EventToCommandBehavior EventName="TextChanged"
+                                                    Command="{Binding ValidateCommand}"/>-->
+                        <xct:EmailValidationBehavior 
+                            RegexPattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"
+                            x:Name="EmailValidator"
+                            DecorationFlags="Trim"
+                            InvalidStyle="{StaticResource InvalidEntryStyle}"/>
+                    </Entry.Behaviors>
+                    
+                </Entry>
+                <Label Text="Invalid email"
+                   TextColor="Red"
+                   FontSize="10"
+                   IsVisible="{Binding IsNotValid, Source={x:Reference EmailValidator}}"
+                   />
+                <!--<Label Text="{Binding Email.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                       Style="{StaticResource ValidationErrorLabelStyle}"/>-->
                 <Entry x:Name="password" IsPassword="True" Placeholder="Password" PlaceholderColor="White" Text="{Binding Password}" TextColor="White"/>
                 <Button Text="Login" BackgroundColor="#60a154" TextColor="White" Command="{Binding LoginCommand}"
-                        CornerRadius="10"/>           
-                <Label Text="Forgot password?"                   
+                        CornerRadius="10"/>
+                <Label Text="Forgot password?"
                         FontAttributes="Bold"
                         FontSize="15"
                         TextColor="#fff"

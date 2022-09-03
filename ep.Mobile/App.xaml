@@ -8,6 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="ErrorColor">#ff5252</Color>
             <x:String x:Key="IconCoffee">&#xf0f4;</x:String>
             <Style x:Key="InvalidStyle" TargetType="Entry">
                 <Setter Property="TextColor" Value="Red"/>
@@ -30,6 +31,15 @@
                         </VisualStateGroup>
                     </VisualStateGroupList>
                 </Setter>
+            </Style>
+            <OnPlatform x:Key="LittleSize" x:TypeArguments="x:Double">
+                <On Platform="iOS" Value="11" />
+                <On Platform="Android, WinUI" Value="12" />
+            </OnPlatform>
+            <!--  EXPLICIT STYLES  -->
+            <Style x:Key="ValidationErrorLabelStyle" TargetType="{x:Type Label}">
+                <Setter Property="TextColor" Value="{StaticResource ErrorColor}" />
+                <Setter Property="FontSize" Value="{StaticResource LittleSize}" />
             </Style>
         </ResourceDictionary>        
     </Application.Resources>

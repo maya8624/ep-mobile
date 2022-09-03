@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ep.Mobile.PageModels"
              xmlns:fontAwesome="clr-namespace:FontAwesome"
-             xmlns:ctr="clr-namespace:ep.Mobile.Views;assembly=ep.Mobile"
+             xmlns:ctr="clr-namespace:ep.Mobile.Views;assembly=ep.Mobile"             
              x:Class="ep.Mobile.Pages.CustomerPage"
              Shell.FlyoutBehavior="Flyout"
              Title="Add a customer">
