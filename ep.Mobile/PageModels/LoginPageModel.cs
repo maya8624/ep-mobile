@@ -46,7 +46,7 @@ namespace ep.Mobile.PageModels
             _pageService = DependencyService.Get<IPageService>();
             _shopService = DependencyService.Get<IShopService>();
             _loginValidation = new LoginValidation();
-        }
+        }   
 
         public override async Task InitializeAsync(object parameter)
         {
