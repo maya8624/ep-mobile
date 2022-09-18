@@ -1,9 +1,12 @@
-﻿using System;
+﻿using ep.Mobile.Reference;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace ep.Mobile.Crypto
 {
@@ -31,6 +34,38 @@ namespace ep.Mobile.Crypto
             cipher.Padding = PaddingMode.ISO10126;         
             cipher.Key = Convert.FromBase64String(key);// conversions.HexToByteArray("892C*E496"); //symetric key
             return cipher;
+        }
+
+        public static string GetHash(string text, string salt)
+        {
+            byte[] secret = Encoding.UTF8.GetBytes(salt);            
+            string hashedText = Convert.ToBase64String(KeyDerivation.Pbkdf2
+            (
+                   password: text,
+                   salt: secret,
+                   prf: KeyDerivationPrf.HMACSHA256,
+                   iterationCount: 10000,
+                   numBytesRequested: 256 / 8)
+            );
+            return hashedText;
+        }
+
+        public static string GetSalt()
+        {
+            byte[] salt = new byte[128 / 8];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetNonZeroBytes(salt);
+            }
+            var hex = Convert.ToBase64String(salt);
+            return hex;
+        }
+
+        public static async Task<string> GetHashedText(string text)
+        {
+            var salt = await SecureStorage.GetAsync(Constant.StorageSaltKey);
+            var hashedText = GetHash(text, salt);
+            return hashedText;
         }
     }
 }

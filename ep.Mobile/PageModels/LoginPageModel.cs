@@ -1,11 +1,15 @@
-﻿using ep.Mobile.Extensions;
+﻿using ep.Mobile.Crypto;
+using ep.Mobile.Extensions;
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.PageModels.Base;
 using ep.Mobile.Pages;
 using ep.Mobile.Reference;
 using ep.Mobile.Validations;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using MvvmHelpers.Commands;
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -76,18 +80,18 @@ namespace ep.Mobile.PageModels
                     return;
                 }
 
-                var errorMessage = "Invalid email or password";
                 var storedEmail = await SecureStorage.GetAsync(Constant.StorageEmailKey);
                 if (storedEmail is null || !storedEmail.Equals(Email))
                 {
-                    ValidateMessage = errorMessage;
+                    ValidateMessage = Constant.InvalidLoginMessage;
                     return;
                 }
-                
+
+                var hashedText = await CryptoService.GetHashedText(Password);
                 var storedPassword = await SecureStorage.GetAsync(Constant.StoragePasswordKey);
-                if (storedPassword is null || !storedPassword.Equals(Password))
+                if (storedPassword is null || !storedPassword.Equals(hashedText))
                 {
-                    ValidateMessage = errorMessage;
+                    ValidateMessage = Constant.InvalidLoginMessage;
                     return;
                 }
                 
@@ -96,7 +100,6 @@ namespace ep.Mobile.PageModels
             }
             catch (Exception ex)
             {
-                //TODO: change the error message
                 await _pageService.DisplayAlert("Error", ex.Message, "OK");
             }
         }

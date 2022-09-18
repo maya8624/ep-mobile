@@ -1,4 +1,5 @@
-﻿using ep.Mobile.Extensions;
+﻿using ep.Mobile.Crypto;
+using ep.Mobile.Extensions;
 using ep.Mobile.Interfaces.IAPIs;
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
@@ -163,10 +164,11 @@ namespace ep.Mobile.PageModels
                     return;
                 }
 
+                var hashedText = await CryptoService.GetHashedText(CurrentPassword);
                 var storedPassword = await SecureStorage.GetAsync(Constant.StoragePasswordKey);
-                if (storedPassword.Equals(CurrentPassword) is false)
+                if (storedPassword.Equals(hashedText) is false)
                 {
-                    ValidateMessage = "Current Password is invalid.";
+                    ValidateMessage = Constant.CurrentPasswordInvalidMessage;
                     return;
                 }
 
@@ -182,19 +184,9 @@ namespace ep.Mobile.PageModels
 
         private async Task SaveNewPassword()
         {
-            //TODO: move the secret from the code
-            var secret = "KxqP9uJZFaLcIUO0G19XQA==";
-            byte[] byteSecret = Encoding.UTF8.GetBytes(secret);
-            
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2
-            (
-                   password: NewPassword,
-                   salt: byteSecret,
-                   prf: KeyDerivationPrf.HMACSHA256,
-                   iterationCount: 100000,
-                   numBytesRequested: 256 / 8)
-            );
-            await SecureStorage.SetAsync(Constant.StoragePasswordKey, hashed);
+            var salt = await SecureStorage.GetAsync(Constant.StorageSaltKey);
+            var hashedPassword = CryptoService.GetHash(NewPassword, salt);
+            await SecureStorage.SetAsync(Constant.StoragePasswordKey, hashedPassword);
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using ep.Mobile.Extensions;
+﻿using ep.Mobile.Crypto;
+using ep.Mobile.Extensions;
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
+using ep.Mobile.Pages;
 using ep.Mobile.Reference;
 using ep.Mobile.Utils;
 using ep.Mobile.Validations;
@@ -10,6 +12,8 @@ using FluentValidation;
 using MvvmHelpers.Commands;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -213,16 +217,18 @@ namespace ep.Mobile.PageModels
         {
             try
             {
-                // TODO: Apply Cryptography
+                var salt = CryptoService.GetSalt();
+                await SecureStorage.SetAsync(Constant.StorageSaltKey, salt);
+                var hasedPassword = CryptoService.GetHash(Password, salt);
+                await SecureStorage.SetAsync(Constant.StoragePasswordKey, hasedPassword);
                 await SecureStorage.SetAsync(Constant.StorageEmailKey, Email);
-                await SecureStorage.SetAsync(Constant.StoragePasswordKey, Password);
             }
             catch (Exception)
             {
                 throw;
             }
         }
-       
+
         private async Task<string> CreateTempPassword()
         {
             var randomPassword = PasswordGenerator.GeneratePassword();

@@ -32,6 +32,10 @@
 
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
+        <!--<ShellContent Route="ShopPage" ContentTemplate="{DataTemplate pages:ShopPage}" />-->
+    </ShellItem>
+
+    <ShellItem Route="ShopPage" FlyoutItemIsVisible="False">
         <ShellContent Route="ShopPage" ContentTemplate="{DataTemplate pages:ShopPage}" />
     </ShellItem>
     <!--<ShellItem Route="RegisterPage" FlyoutItemIsVisible="False">
