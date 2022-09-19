@@ -156,6 +156,12 @@ namespace ep.Mobile.PageModels
             }
         }
 
+        private async Task DeletePreviousRecordsAsync()
+        {
+            var now = DateTime.Now;
+            await _customerService.DeleteAllRecordsAsync(now);
+        }
+
         private async Task GetOrderItemsAsync()
         {
             try
@@ -193,25 +199,12 @@ namespace ep.Mobile.PageModels
                 await _pageService.DisplayAlert("Error", $"{nameof(GetOrderSummaryAsync)}|message: {ex.Message}", "Close");
                 throw;
             }
-        }
-
-        public override async Task InitializeAsync(object parameter)
-        {
-            await InitLoadAsync();
-
-            //HubConnection = new HubConnectionBuilder()
-            //    .WithUrl($"{Constant.ApiBaseUrl}/hub/customer")
-            //    .ConfigureLogging(logging =>
-            //    {
-            //        logging.AddFilter("SignalR", LogLevel.Debug);
-            //    })
-            //    .Build();
-            //HubOn();
-        }
+        }      
 
         private async Task InitLoadAsync()
         {
             IsRunning = true;
+            await DeletePreviousRecordsAsync();
             await GetOrderItemsAsync();
             await GetOrderSummaryAsync();
             IsRunning = false;
