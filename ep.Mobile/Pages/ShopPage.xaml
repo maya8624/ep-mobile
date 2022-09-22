@@ -49,12 +49,7 @@
                                    Placeholder="Email"
                                    PlaceholderColor="#696966" 
                                    WidthRequest="350"
-                                   HeightRequest="45">
-                    <!--<ctr:EntryOutlined.Behaviors>
-                        <xct:EmailValidationBehavior
-                        DecorationFlags="Trim" InvalidStyle="{StaticResource Key=InvalidStyle}"/>
-                    </ctr:EntryOutlined.Behaviors>-->
-                </ctr:EntryOutlined>
+                                   HeightRequest="45"/>
                 <ctr:EntryPassword Text="{Binding Password, Mode=TwoWay}" 
                                    IsPassword="True"
                                    Placeholder="Password"
@@ -67,7 +62,10 @@
                                    PlaceholderColor="#696966" 
                                    WidthRequest="350"
                                    HeightRequest="45"/>
-            </StackLayout>            
+                <Label TextColor="Red"
+                       Text="{Binding ValidateMessage, 
+                       Mode=TwoWay}"/>
+            </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Button Text="Save" 
                         Command="{Binding SaveCommand}" 

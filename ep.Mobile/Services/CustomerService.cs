@@ -23,6 +23,17 @@ namespace ep.Mobile.Services
             _smsService = DependencyService.Get<ISmsService>();
         }
 
+        public async Task DeleteAllRecordsAsync()
+        {
+            await App.Database.DeleteAllRecordsAsync<Customer>();
+            await App.Database.DeleteAllRecordsAsync<Message>();             
+        }
+
+        public async Task<bool> AnyCustomers(DateTime dateTime)
+        {
+            return await App.Database.AnyCustomer(dateTime);
+        }
+
         public async Task<Customer> GetCustomerByIdAsync(int id)
         {
             try

@@ -1,16 +1,16 @@
-﻿using ep.Mobile.Interfaces.IAPIs;
+﻿using ep.Mobile.Crypto;
+using ep.Mobile.Extensions;
+using ep.Mobile.Interfaces.IAPIs;
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
 using ep.Mobile.Reference;
 using ep.Mobile.Utils;
+using ep.Mobile.Validations;
 using ep.Mobile.Views;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using MvvmHelpers.Commands;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -22,24 +22,30 @@ namespace ep.Mobile.PageModels
     {
         private readonly IAPIService _apiService;
         private readonly IPageService _pageService;
-        private readonly IShopService _shopService;
 
         public AsyncCommand ReceiveCommand { get; }
         public AsyncCommand ResetCommand { get; }
         public AsyncCommand VerifyCommand { get; }
         
-        private string _newPassword;
-        public string NewPassword 
+        private string _currentPassword;
+        public string CurrentPassword 
         { 
-            get => _newPassword;
-            private set => SetProperty(ref _newPassword, value);
+            get => _currentPassword;
+            set => SetProperty(ref _currentPassword, value);
         }
 
+        private string _newPassword;
+        public string NewPassword
+        {
+            get => _newPassword;
+            set => SetProperty(ref _newPassword, value);
+        }
+        
         private string _confirmPassword;
-        public string ConfirmPassword 
-        { 
-            get => _confirmPassword; 
-            set => SetProperty(ref _confirmPassword, value); 
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set => SetProperty(ref _confirmPassword, value);
         }
 
         private string _email;
@@ -77,18 +83,29 @@ namespace ep.Mobile.PageModels
             set => SetProperty(ref _showReceiveEmail, value);
         }
 
+        private string _validateMessage;
+        public string ValidateMessage
+        {
+            get => _validateMessage;
+            set => SetProperty(ref _validateMessage, value);
+        }
+
+        private readonly ResetPasswordValidation _validation;
+
         private readonly string _endPoint = "message/email";
+        
         public ResetPasswordModel()
         {
             _apiService = DependencyService.Get<IAPIService>();
             _pageService = DependencyService.Get<IPageService>();
-            _shopService = DependencyService.Get<IShopService>();
+            _validation = new ResetPasswordValidation();
+
             ResetCommand = new AsyncCommand(ResetPassword);
             ReceiveCommand = new AsyncCommand(ReceiveVerificationCode);
             VerifyCommand = new AsyncCommand(VerifyCode);
-        }
+    }
 
-        private async Task ReceiveVerificationCode()
+    private async Task ReceiveVerificationCode()
         {
             try
             {
@@ -98,12 +115,14 @@ namespace ep.Mobile.PageModels
                 await SecureStorage.SetAsync("verification_code", code);
                 var shop = await App.Database.GetShopAsync();
                 var userEmail = await SecureStorage.GetAsync(Constant.StorageEmailKey);
+                
                 var email = new EmailForm
                 {
                     To = userEmail,
                     Subject = "EP - Verification Code",
                     Content = $"Verification Code: {code}, Enter the 6 digit code on the app"
                 };
+
                 //TODO: send an email with 6 digit code
                 await _apiService.PostAsync(email, _endPoint);
                 _showReceiveEmail = false;
@@ -138,35 +157,36 @@ namespace ep.Mobile.PageModels
         {
             try
             {
-                if (string.IsNullOrEmpty(NewPassword))
+                var validation = await _validation.ValidateAsync(this);
+                if (validation.IsValid is false)
                 {
-                    await _pageService.DisplayAlert("Info", "Please enter New Password", "OK");
+                    ValidateMessage = validation.GetErrorMesages();
                     return;
                 }
-                if (string.IsNullOrEmpty(ConfirmPassword))
+
+                var hashedText = await CryptoService.GetHashedText(CurrentPassword);
+                var storedPassword = await SecureStorage.GetAsync(Constant.StoragePasswordKey);
+                if (storedPassword.Equals(hashedText) is false)
                 {
-                    await _pageService.DisplayAlert("Info", "Please enter Confirm Password", "OK");
+                    ValidateMessage = Constant.CurrentPasswordInvalidMessage;
                     return;
                 }
-               
-                //TODO: move the secret from the code
-                var secret = "KxqP9uJZFaLcIUO0G19XQA==";
-                byte[] byteSecret = Encoding.UTF8.GetBytes(secret);
-                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                       password: NewPassword,
-                       salt: byteSecret,
-                       prf: KeyDerivationPrf.HMACSHA256,
-                       iterationCount: 100000,
-                       numBytesRequested: 256 / 8));
-                SymmetricAlgorithm Algo;
-                await SecureStorage.SetAsync("password", hashed);
+
+                await SaveNewPassword();
                 await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
             }
             catch (Exception ex)
-            {
+            { 
                 await _pageService.DisplayAlert("Error", ex.Message, "OK");
                 throw;
             }
+        }
+
+        private async Task SaveNewPassword()
+        {
+            var salt = await SecureStorage.GetAsync(Constant.StorageSaltKey);
+            var hashedPassword = CryptoService.GetHash(NewPassword, salt);
+            await SecureStorage.SetAsync(Constant.StoragePasswordKey, hashedPassword);
         }
     }
 }

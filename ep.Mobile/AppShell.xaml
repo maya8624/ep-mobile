@@ -32,18 +32,32 @@
 
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
+        <!--<ShellContent Route="ShopPage" ContentTemplate="{DataTemplate pages:ShopPage}" />-->
+    </ShellItem>
+
+    <ShellItem Route="ShopPage" FlyoutItemIsVisible="False">
+        <ShellContent Route="ShopPage" ContentTemplate="{DataTemplate pages:ShopPage}" />
     </ShellItem>
     <!--<ShellItem Route="RegisterPage" FlyoutItemIsVisible="False">
         <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate pages:RegisterPage}" />
     </ShellItem>-->
-    <FlyoutItem Title="Edit Shop" Icon="icon_about.png" Route="ShopPage">
+    <FlyoutItem Title="Edit Shop" Icon="icon_about.png" Route="EditShopPage">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate pages:ShopPage}" />            
+            <ShellContent ContentTemplate="{DataTemplate pages:EditShopPage}" />           
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Register" Icon="icon_about.png" Route="RegisterPage">
         <ShellContent ContentTemplate="{DataTemplate pages:RegisterPage}" />
     </FlyoutItem>
+    <FlyoutItem Title="Reset Password" Icon="icon_about.png" Route="ResetPassword">
+        <ShellContent ContentTemplate="{DataTemplate local:ResetPassword}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Sing Out" Icon="icon_about.png" Route="ResetPassword">
+        <Tab>
+            <!--<ShellContent ContentTemplate="{DataTemplate local:ResetPassword}" />-->
+        </Tab>
+    </FlyoutItem>
+
     <TabBar>
         <!--<ShellContent Title="Login" FlyoutItem.IsVisible="True" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:LoginPage}" />-->
         <!--<ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />-->

@@ -2,6 +2,7 @@
 using ep.Mobile.Interfaces.IServices;
 using ep.Mobile.Models;
 using ep.Mobile.PageModels.Base;
+using ep.Mobile.Reference;
 using Microsoft.AspNetCore.SignalR.Client;
 using MvvmHelpers.Commands;
 using Newtonsoft.Json;
@@ -156,6 +157,29 @@ namespace ep.Mobile.PageModels
             }
         }
 
+        private async Task DeletePreviousRecordsAsync()
+        {
+            try
+            {
+                var date = DateTime.Now.Date;
+                var reset = await SecureStorage.GetAsync(Constant.StorageResetKey);
+                if (string.IsNullOrEmpty(reset) || reset != date.ToShortDateString())
+                {
+                    var any = await _customerService.AnyCustomers(date);
+                    if (any)
+                    { 
+                        await _customerService.DeleteAllRecordsAsync();
+                    }
+                    await SecureStorage.SetAsync(Constant.StorageResetKey, date.ToShortDateString());
+                }
+            }
+            catch (Exception ex)
+            {
+                await _pageService.DisplayAlert("Error", $"{nameof(DeletePreviousRecordsAsync)}|message: {ex.Message}", "Ok");
+                throw;
+            }
+        }
+
         private async Task GetOrderItemsAsync()
         {
             try
@@ -193,25 +217,12 @@ namespace ep.Mobile.PageModels
                 await _pageService.DisplayAlert("Error", $"{nameof(GetOrderSummaryAsync)}|message: {ex.Message}", "Close");
                 throw;
             }
-        }
-
-        public override async Task InitializeAsync(object parameter)
-        {
-            await InitLoadAsync();
-
-            //HubConnection = new HubConnectionBuilder()
-            //    .WithUrl($"{Constant.ApiBaseUrl}/hub/customer")
-            //    .ConfigureLogging(logging =>
-            //    {
-            //        logging.AddFilter("SignalR", LogLevel.Debug);
-            //    })
-            //    .Build();
-            //HubOn();
-        }
+        }      
 
         private async Task InitLoadAsync()
         {
             IsRunning = true;
+            await DeletePreviousRecordsAsync();
             await GetOrderItemsAsync();
             await GetOrderSummaryAsync();
             IsRunning = false;
@@ -363,5 +374,10 @@ namespace ep.Mobile.PageModels
         //        //_connected = false;
         //    }
         //}
+
+        public override async Task InitializeAsync(object parameter)
+        {
+            await InitLoadAsync();
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using ep.Mobile.Enums;
 using ep.Mobile.Models;
 using SQLite;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ep.Mobile.Data
@@ -18,11 +20,19 @@ namespace ep.Mobile.Data
             _database.CreateTableAsync<Shop>().Wait();
         }
 
-        public async Task DeleteAllCustomersAsync()
+        public async Task DeleteAllRecordsAsync<T>()
         {
-            await _database.DeleteAllAsync<Customer>();
+            await _database.DeleteAllAsync<T>();
         }
                
+        public async Task<bool> AnyCustomer(DateTime dateTime)
+        {
+            var customer = await _database
+                ?.Table<Customer>()
+                ?.FirstOrDefaultAsync(x => x.CreatedOn < dateTime);
+            return customer != null;
+        }
+
         public async Task<Customer> GetCustomerByIdAsync(int id)
         {
             return await _database.Table<Customer>().FirstOrDefaultAsync(x => x.Id == id);

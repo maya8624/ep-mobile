@@ -189,7 +189,7 @@
                                                     FontFamily="FR" FontSize="14" 
                                                     TextColor="#2196F3" 
                                                     VerticalOptions="Center"/>
-                                            <Label Text="{Binding CreatedOn, StringFormat='{0:g}'}" 
+                                            <Label Text="{Binding CreatedOn, StringFormat='{0:dd/MM/yyyy}'}" 
                                                     TextColor="#E8882A"
                                                     FontAttributes="Bold"
                                                     FontSize="14"/>

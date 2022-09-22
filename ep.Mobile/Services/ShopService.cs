@@ -72,12 +72,12 @@ namespace ep.Mobile.Services
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
                     //TODO: Use "Put"
-                    var request = await _apiService.PostAsync(shop, Constant.UpdateShopEndpoint);
-                    if (!string.IsNullOrEmpty(request))
-                    {
-                        //TODO: custom exception
-                        throw new Exception("No data returned from the server.");
-                    }
+                    //var request = await _apiService.PostAsync(shop, Constant.UpdateShopEndpoint);
+                    //if (!string.IsNullOrEmpty(request))
+                    //{
+                    //    //TODO: custom exception
+                    //    throw new Exception("No data returned from the server.");
+                    //}
                 }
                 await App.Database.UpdateShopAsync(shop);
             }
