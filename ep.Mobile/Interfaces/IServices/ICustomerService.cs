@@ -10,7 +10,8 @@ namespace ep.Mobile.Interfaces.IServices
     public interface ICustomerService
     {
         //TODO: Move SendSMSAsync to MessageService
-        Task DeleteAllRecordsAsync(DateTime dateTime);
+        Task<bool> AnyCustomers(DateTime dateTime);
+        Task DeleteAllRecordsAsync();
         Task<Customer> GetCustomerByIdAsync(int id);
         Task<OrderItem> GetCustomerByOrderNoAsync(string orderNo);
         Task<IEnumerable<OrderItem>> GetOrderItemsAsync();

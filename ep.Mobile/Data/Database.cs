@@ -29,7 +29,7 @@ namespace ep.Mobile.Data
         {
             var customer = await _database
                 ?.Table<Customer>()
-                ?.FirstOrDefaultAsync(x => x.CreatedOn.CompareTo(dateTime) >= 0);
+                ?.FirstOrDefaultAsync(x => x.CreatedOn < dateTime);
             return customer != null;
         }
 

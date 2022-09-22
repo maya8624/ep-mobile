@@ -15,6 +15,7 @@ namespace ep.Mobile.Reference
         public const string GoogleApiBaseUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?";
         public const string StorageEmailKey = "Email";
         public const string StoragePasswordKey = "Password";
+        public const string StorageResetKey = "Reset";
         public const string StorageSaltKey = "Salt";
         public const string SymKey = "symKey";
         public const string UpdateShopEndpoint = "api/shop/update";
