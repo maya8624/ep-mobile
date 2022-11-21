@@ -22,8 +22,8 @@ namespace ep.Mobile.PageModels
         private readonly LoginValidation _loginValidation;
         private readonly IPageService _pageService;
         private readonly IShopService _shopService;
-      
-        private string _email;
+
+        private string _email = "maya8624@hotmail.com";
         public string Email 
         { 
             get => _email; 

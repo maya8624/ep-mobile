@@ -7,16 +7,18 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              x:Class="ep.Mobile.Pages.OrderPage"
              Shell.NavBarIsVisible="False"
-             Shell.FlyoutBehavior="Flyout"             
-             BackgroundColor="#F5F5F5">
+             Shell.FlyoutBehavior="Flyout"
+             BackgroundColor="#2196F3"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True">
     <ContentPage.BindingContext>
         <vm:OrderPageModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <RefreshView IsRefreshing="{Binding IsRefreshing}"
                      Command="{Binding RefreshCommand}"
-                     RefreshColor="#2196F3">            
-            <Grid VerticalOptions="FillAndExpand">
+                     RefreshColor="#2196F3">
+            <Grid VerticalOptions="FillAndExpand" BackgroundColor="#f7f7f7">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -29,8 +31,8 @@
                     <Label Text="{Binding CurrentDate}" Padding="5,5,0,0" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="White"/>
                 </StackLayout>  
             </StackLayout>
-            <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="20,-40,20,0" Padding="0" HeightRequest="100" VerticalOptions="Start">
-                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+            <Frame Grid.Row="1" HasShadow="True" BackgroundColor="#fff" CornerRadius="10" Margin="20,-40,20,0" Padding="0" HeightRequest="100" VerticalOptions="Start">
+                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -116,8 +118,20 @@
                             HorizontalOptions="CenterAndExpand"
                             Grid.Row="3"
                             ItemsSource="{Binding OrderItems}" 
-                            Margin="10" 
-                            EmptyView="No items to display">
+                            Margin="10">
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <StackLayout HorizontalOptions="CenterAndExpand"
+                                         VerticalOptions="CenterAndExpand">
+                                <Label Text="No items to display."
+                                       Margin="10, 25, 10, 10"
+                                       TextColor="#999494"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Fill"
+                                       HorizontalTextAlignment="Center"/>
+                            </StackLayout>
+                        </ContentView> 
+                    </CollectionView.EmptyView>                        
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
                 </CollectionView.ItemsLayout>
@@ -138,14 +152,14 @@
                                                CommandParameter="{Binding .}"/>
                                 </SwipeItems>
                             </SwipeView.RightItems>
-                            <Frame HasShadow="False" CornerRadius="10" Margin="3" HeightRequest="70">
-                                <Grid>
+                            <Frame HasShadow="False" CornerRadius="10" Margin="3" HeightRequest="70" BackgroundColor="#fff">
+                                <Grid BackgroundColor="#fff">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <StackLayout HorizontalOptions="Start" Padding="0,0,0,0">
+                                    <StackLayout HorizontalOptions="Start" Padding="0,0,0,0" >
                                         <StackLayout Orientation="Horizontal" Padding="-3,0,0,0">
                                             <Label Text="{x:Static fontAwesome:FontAwesomeIcons.CaretDown}" 
                                                    FontFamily="FR" FontSize="14" 

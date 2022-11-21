@@ -49,6 +49,8 @@ namespace ep.Mobile
 
         public App()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzYzOTk5QDMyMzAyZTMzMmUzMFZrVmdEcU1hWVNrNnJTb254MkMvNU5qUXFoTDMvdlpyOHptU2FydVFLMjQ9");
+
             InitializeComponent();
             DependencyService.Register<MockDataStore>();
             DependencyService.Register<IAPIService, APIService>();

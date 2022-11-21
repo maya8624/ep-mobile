@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ep.Mobile;
 using Foundation;
+using Syncfusion.XForms.iOS.TextInputLayout;
 using UIKit;
 
 namespace epMobile.iOS
@@ -23,6 +24,7 @@ namespace epMobile.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            SfTextInputLayoutRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

@@ -57,15 +57,15 @@ namespace ep.Mobile.Views
             set { SetValue(IsPasswordProperty, value); }
         }
 
-        //private async void TextBox_Focused(object sender, FocusEventArgs e)
-        //{
-        //    await TranslateLabelToTitle();
-        //}
+        private async void TextBox_Focused(object sender, FocusEventArgs e)
+        {
+            await TranslateLabelToTitle();
+        }
 
-        //private async void TextBox_Unfocused(object sender, FocusEventArgs e)
-        //{
-        //    await TranslateLabelToPlaceHolder();
-        //}
+        private async void TextBox_Unfocused(object sender, FocusEventArgs e)
+        {
+            await TranslateLabelToPlaceHolder();
+        }
 
         private async Task TranslateLabelToTitle()
         {
