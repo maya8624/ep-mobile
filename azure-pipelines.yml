@@ -1,19 +1,20 @@
-# Xamarin.Android
-
 trigger:
 - main
 
+pool:
+  vmImage: 'windows-2022'
+  
 variables:
-- group: 'variables'
+  buildConfiguration: 'Release'
+  outputDirectory: '$(build.binariesDirectory)/$(buildConfiguration)'
 
-jobs:
-  - job: 'BuildAndroid'
-    pool:
-      vmImage: 'windows-2022'
-      
-    variables:
-      buildConfiguration: 'Release'
-      outputDirectory: '$(build.binariesDirectory)/$(buildConfiguration)'
+stages:
+- stage: BuildApps
+  displayName: "Build The Apps"
+  jobs:
+
+  - job: BuildAndroid
+    displayName: "Build Android App"
 
     steps:
       - task: NuGetToolInstaller@1
@@ -34,11 +35,6 @@ jobs:
           configuration: '$(buildConfiguration)'
           msbuildVersionOption: latest
       
-      # - task: DownloadSecureFile@1
-      #   name: keystore
-      #   inputs:
-      #     secureFile: '$(KeyStore-FileName)'
-          
       - task: AndroidSigning@3
         inputs:
           apkFiles: '**/*.apk'
@@ -54,48 +50,10 @@ jobs:
           targetPath: 'ep.Android\obj\Release\110\android\bin\com.companyname.testmobile.apk'
           artifactName: 'AndroidApk'
 
-      # - task: CopyFiles@2
-      #   inputs:
-      #     Contents: '**/*.apk'
-      #     TargetFolder: '$(Build.ArtifactStagingDirectory)'
-      #     OverWrite: true
-      #     flattenFolders: true
-          
-      # - task: PublishBuildArtifacts@1
-      #   inputs:
-      #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      #     ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
-      #     publishLocation: Container
-
-      # - task: XamarinAndroid@1
-      #   inputs:
-      #     projectFile: '**/*droid*.csproj'
-      #     outputDirectory: '$(Build.BinariesDirectory)'
-      #     configuration: '$(BuildConfiguration)'
-      #     clean: true
-      #     msbuildVersionOption: latest
-      #     msbuildArguments: '/p:JavaSdkDirectory="$(JAVA_HOME_11_X64)/" 
-      #                        /p:AndroidPackageFormat=aab 
-      #                        /t:SignAndroidPackage 
-      #                        /p:AndroidNdkDirectory="$(androidNdkPath)" 
-      #                        /p:AndroidKeyStore="True" 
-      #                        /p:AndroidSigningKeyStore="$(keystore.secureFilePath)" 
-      #                        /p:AndroidSigningKeyPass="$(KeyStore-Password)" 
-      #                        /p:AndroidSigningKeyAlias="$(KeyStore-Alias)" 
-      #                        /p:AndroidSigningStorePass="$(KeyStore-Password)"'
-
-      # - task: CopyFiles@2
-      #   inputs:
-      #     Contents: '**/*.aab'
-      #     TargetFolder: '$(Build.ArtifactStagingDirectory)'
-      #     OverWrite: true
-      #     flattenFolders: true
-
-      # - task: PublishBuildArtifacts@1
-      #   inputs:
-      #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      #     ArtifactName: 'MyAwesomeApp-$(Build.BuildNumber)'
-      #     publishLocation: Container
+- stage: BetaVersions
+  dependsOn: BuildApps
+  displayName: "Beta Release"
+  jobs:  
   - job: AndroidBeta
     displayName: "Release Android Beta"
     dependsOn: [BuildAndroid]
