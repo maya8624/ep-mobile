@@ -1,19 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
 using ep.Mobile.Data;
-using ep.Mobile.Helpers;
 using ep.Mobile.Interfaces.IAPIs;
-using ep.Mobile.Interfaces.IRepos;
 using ep.Mobile.Interfaces.IServices;
-using ep.Mobile.PageModels.Base;
-using ep.Mobile.Repos;
 using ep.Mobile.Services;
-using ep.Mobile.Views;
-using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace ep.Mobile
 {
@@ -54,11 +45,7 @@ namespace ep.Mobile
             InitializeComponent();
             DependencyService.Register<MockDataStore>();
             DependencyService.Register<IAPIService, APIService>();
-            DependencyService.Register<ICustomerRepo, CustomerRepo>();
             DependencyService.Register<ICustomerService, CustomerService>();
-            DependencyService.Register<IMessageRepo, MessageRepo>();            
-            DependencyService.Register<IMessageService, MessageService>();
-            DependencyService.Register<IShopRepo, ShopRepo>();
             DependencyService.Register<IShopService, ShopService>();
             DependencyService.Register<IPageService, PageService>();
             

@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Interfaces\IRepos\**" />
+    <Compile Remove="Repos\**" />
+    <EmbeddedResource Remove="Interfaces\IRepos\**" />
+    <EmbeddedResource Remove="Repos\**" />
+    <None Remove="Interfaces\IRepos\**" />
+    <None Remove="Repos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Helpers\SQLiteHelper.cs" />
     <Compile Remove="Pages\QRPopupPage.xaml.cs" />
   </ItemGroup>
 

@@ -1,7 +1,6 @@
 ﻿using ep.Mobile.Crypto;
 using ep.Mobile.Dtos;
 using ep.Mobile.Interfaces.IServices;
-using ep.Mobile.Interfaces.IRepos;
 using ep.Mobile.Interfaces.IAPIs;
 using ep.Mobile.Models;
 using ep.Mobile.Reference;
