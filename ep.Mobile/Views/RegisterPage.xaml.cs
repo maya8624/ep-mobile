@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace ep.Mobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ResetPassword : ContentPage
+    public partial class RegisterPage : ContentPage
     {
-        public ResetPassword()
+        public RegisterPage()
         {
             InitializeComponent();
         }

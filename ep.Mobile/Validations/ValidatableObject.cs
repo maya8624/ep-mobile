@@ -1,4 +1,4 @@
-﻿using ep.Mobile.PageModels.Base;
+﻿using ep.Mobile.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ep.Mobile.Validations
 {
-    public class ValidatableObject<T> : PageModelBase, IsValidity
+    public class ValidatableObject<T> : ViewModelBase, IsValidity
     {
         private readonly List<IValidationRule<T>> _validations;
         private List<string> _errors;

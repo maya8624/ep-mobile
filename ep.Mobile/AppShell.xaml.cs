@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ep.Mobile.Pages;
-using ep.Mobile.ViewModels;
 using ep.Mobile.Views;
+using ep.Mobile.ViewModels;
 using Xamarin.Forms;
 
 namespace ep.Mobile
@@ -11,9 +10,7 @@ namespace ep.Mobile
     {
         public AppShell()
         {
-            InitializeComponent();
-            Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
-            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+            InitializeComponent();           
             //Routing.RegisterRoute(nameof(ShopPage), typeof(ShopPage));
             //Routing.RegisterRoute()
         }

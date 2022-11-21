@@ -2,7 +2,6 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:ep.Mobile.Views"
-       xmlns:pages="clr-namespace:ep.Mobile.Pages"
        Title="EP"
        x:Class="ep.Mobile.AppShell">
 
@@ -38,22 +37,22 @@
 
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
-        <!--<ShellContent Route="ShopPage" ContentTemplate="{DataTemplate pages:ShopPage}" />-->
+        <!--<ShellContent Route="ShopPage" ContentTemplate="{DataTemplate local:ShopPage}" />-->
     </ShellItem>
 
     <ShellItem Route="ShopPage" FlyoutItemIsVisible="False">
-        <ShellContent Route="ShopPage" ContentTemplate="{DataTemplate pages:ShopPage}" />
+        <ShellContent Route="ShopPage" ContentTemplate="{DataTemplate local:ShopPage}" />
     </ShellItem>
     <!--<ShellItem Route="RegisterPage" FlyoutItemIsVisible="False">
-        <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate pages:RegisterPage}" />
+        <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate local:RegisterPage}" />
     </ShellItem>-->
     <FlyoutItem Title="Edit Shop" Icon="icon_about.png" Route="EditShopPage">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate pages:EditShopPage}" />           
+            <ShellContent ContentTemplate="{DataTemplate local:EditShopPage}" />           
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Register" Icon="icon_about.png" Route="RegisterPage">
-        <ShellContent ContentTemplate="{DataTemplate pages:RegisterPage}" />
+        <ShellContent ContentTemplate="{DataTemplate local:RegisterPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Reset Password" Icon="icon_about.png" Route="ResetPassword">
         <ShellContent ContentTemplate="{DataTemplate local:ResetPassword}" />
@@ -68,10 +67,10 @@
         <!--<ShellContent Title="Login" FlyoutItem.IsVisible="True" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:LoginPage}" />-->
         <!--<ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />-->
         <!--<ShellContent Route ="WeatherPage" Title="Weather" Icon="icon_about.png" ContentTemplate="{DataTemplate local:AutoComplete}" />-->
-        <ShellContent Route="OrderPage" Title="Orders" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:OrderPage}" />
-        <ShellContent Route="CustomerPage" Title="Customer" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:CustomerPage}" />
-        <ShellContent Route="ShopPage" Title="Shop" Icon="icon_about.png" IsVisible="True" ContentTemplate="{DataTemplate pages:ShopPage}" />
-        <ShellContent Route="EditShopPage" Title="Business" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:EditShopPage}" />
+        <ShellContent Route="OrderPage" Title="Orders" Icon="icon_about.png" ContentTemplate="{DataTemplate local:OrderPage}" />
+        <ShellContent Route="CustomerPage" Title="Customer" Icon="icon_about.png" ContentTemplate="{DataTemplate local:CustomerPage}" />
+        <ShellContent Route="ShopPage" Title="Shop" Icon="icon_about.png" IsVisible="True" ContentTemplate="{DataTemplate local:ShopPage}" />
+        <ShellContent Route="EditShopPage" Title="Business" Icon="icon_about.png" ContentTemplate="{DataTemplate local:EditShopPage}" />
     </TabBar>
     <!--
         If you would like to navigate to this content you can do so by calling

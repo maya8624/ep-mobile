@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ep.Mobile.ViewModels"
+             x:Class="ep.Mobile.Views.EditShopPage"
+             Title="Edit business information"
+             Shell.NavBarIsVisible="False"
+             xmlns:fontAwesome="clr-namespace:FontAwesome"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true" 
+             BackgroundColor="#fff">
+    <ContentPage.BindingContext>
+        <vm:EditShopPageModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="CenterAndExpand"
+                     HorizontalOptions="CenterAndExpand"
+                     WidthRequest="350">
+            <StackLayout Margin="-5">
+                <Image Aspect="AspectFit" Source="form.png" HeightRequest="100" />
+            </StackLayout>
+            <StackLayout HorizontalOptions="CenterAndExpand" 
+                         Margin="5"
+                         BackgroundColor="#fff">
+                <StackLayout Orientation="Horizontal" 
+                             HorizontalOptions="StartAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                                 WidthRequest="25">
+                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.IdCard}" 
+                               FontSize="20" 
+                               FontFamily="FR" 
+                               TextColor="#2196F3" />
+                    </StackLayout>
+                    <StackLayout>
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="ABN"
+                            FocusedColor="#2196F3"
+                            ContainerBackgroundColor="#fff">
+                            <Entry Text="{Binding ABN, Mode=TwoWay}"
+                                   TextColor="#000"
+                                   WidthRequest="280"
+                                   MaxLength="20"
+                                   Keyboard="Numeric"
+                                   ClearButtonVisibility="WhileEditing" />
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" 
+                             HorizontalOptions="StartAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                                 WidthRequest="25">
+                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.MapMarkerAlt}" 
+                               FontSize="20" 
+                               FontFamily="FR" 
+                               TextColor="#2196F3" />
+                    </StackLayout>
+                    <StackLayout>
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="Address"
+                            FocusedColor="#2196F3"
+                            ContainerBackgroundColor="#fff">
+                            <Entry Text="{Binding Address, Mode=TwoWay}"
+                                   TextColor="#000"
+                                   WidthRequest="280"
+                                   MaxLength="100"
+                                   ClearButtonVisibility="WhileEditing" />
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" 
+                             HorizontalOptions="StartAndExpand" >
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                                 WidthRequest="25">
+                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Building}" 
+                               FontSize="20" 
+                               FontFamily="FR" 
+                               TextColor="#2196F3" />
+                    </StackLayout>
+                    <StackLayout>
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="Business Name"
+                            FocusedColor="#2196F3"
+                            ContainerBackgroundColor="#fff">
+                            <Entry Text="{Binding BusinessName, Mode=TwoWay}"
+                                   TextColor="#000"
+                                   WidthRequest="280"
+                                   MaxLength="100"
+                                   ClearButtonVisibility="WhileEditing" />
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" 
+                             HorizontalOptions="StartAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                                 WidthRequest="25">
+                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.User}" 
+                               FontSize="20" 
+                               FontFamily="FR" 
+                               TextColor="#2196F3" />
+                    </StackLayout>
+                    <StackLayout>
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="Owner"
+                            FocusedColor="#2196F3"
+                            ContainerBackgroundColor="#fff">
+                            <Entry Text="{Binding Owner, Mode=TwoWay}"
+                                   TextColor="#000"
+                                   WidthRequest="280"
+                                   MaxLength="50"
+                                   ClearButtonVisibility="WhileEditing" />
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" 
+                             HorizontalOptions="StartAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                                 WidthRequest="25">
+                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.MobileAlt}" 
+                               FontSize="22" 
+                               FontFamily="FR" 
+                               TextColor="#2196F3" />
+                    </StackLayout>
+                    <StackLayout>
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="Phone"
+                            FocusedColor="#2196F3"
+                            ContainerBackgroundColor="#fff">
+                            <Entry Text="{Binding Phone, Mode=TwoWay}" 
+                                   TextColor="#000"
+                                   MaxLength="10"
+                                   Keyboard="Numeric"
+                                   WidthRequest="280"
+                                   ClearButtonVisibility="WhileEditing" />
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" 
+                             HorizontalOptions="StartAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                                 WidthRequest="25">
+                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Envelope}" 
+                               FontSize="20" 
+                               FontFamily="FR" 
+                               TextColor="#2196F3" />
+                    </StackLayout>
+                    <StackLayout>
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="Email"
+                            FocusedColor="#2196F3"
+                            ContainerBackgroundColor="#fff">
+                            <Entry Text="{Binding Email, Mode=TwoWay}"
+                                   TextColor="#000"
+                                   WidthRequest="280"
+                                   MaxLength="100"
+                                   Keyboard="Email"
+                                   IsEnabled="False"
+                                   ClearButtonVisibility="WhileEditing" />
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+                </StackLayout>
+                <Label TextColor="Red"
+                       Text="{Binding ValidateMessage, Mode=TwoWay}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Save" 
+                        Command="{Binding SaveCommand}" 
+                        HorizontalOptions="CenterAndExpand"
+                        CornerRadius="5"
+                        WidthRequest="330"
+                        Margin="0,-10,0,0"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

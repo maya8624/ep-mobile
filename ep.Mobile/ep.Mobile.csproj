@@ -54,17 +54,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Pages\ORderPage.xaml.cs">
+    <Compile Update="Views\ORderPage.xaml.cs">
       <DependentUpon>OrderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\BarcodePage.xaml.cs">
+    <Compile Update="Views\BarcodePage.xaml.cs">
       <DependentUpon>BarcodePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\SearchDetailsPage.xaml.cs">
-      <DependentUpon>SearchDetailsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\SearchPage.xaml.cs">
-      <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\EntryPassword.xaml.cs">
       <DependentUpon>EntryPassword.xaml</DependentUpon>
@@ -72,34 +66,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Pages\CustomerPage.xaml">
+    <EmbeddedResource Update="Views\CustomerPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\BarcodePage.xaml">
+    <EmbeddedResource Update="Views\BarcodePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\EditShopPage.xaml">
+    <EmbeddedResource Update="Views\EditShopPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\RegisterPage.xaml">
+    <EmbeddedResource Update="Views\RegisterPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\SearchDetailsPage.xaml">
+    <EmbeddedResource Update="Views\OrderPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\SearchPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\OrderPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\SettingsPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\ShopPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\AutoComplete.xaml">
+    <EmbeddedResource Update="Views\ShopPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\EditEntryOutlined.xaml">
@@ -123,5 +105,10 @@
     <None Update="Views\EditEntryOutlined.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PageModels\" />
+    <Folder Include="Pages\" />
   </ItemGroup>
 </Project>

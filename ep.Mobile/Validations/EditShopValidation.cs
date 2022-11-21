@@ -1,4 +1,4 @@
-﻿using ep.Mobile.PageModels;
+﻿using ep.Mobile.ViewModels;
 using FluentValidation;
 
 namespace ep.Mobile.Validations

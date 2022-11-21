@@ -1,6 +1,5 @@
 ﻿using System;
-using ep.Mobile.PageModels;
-using ep.Mobile.Pages;
+using ep.Mobile.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
