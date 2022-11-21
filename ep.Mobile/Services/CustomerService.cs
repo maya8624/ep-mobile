@@ -155,7 +155,7 @@ namespace ep.Mobile.Services
             }
         }
 
-        private async Task SenSmsOniOSAsync(string message, string mobile)
+        private async Task SenSmsOniOSAsync(string mobile, string message)
         {
             try
             {

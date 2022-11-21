@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.testmobile" android:installLocation="preferExternal">
 	<uses-sdk android:minSdkVersion="20" android:targetSdkVersion="30" />
-	<application android:label="Epager" 
+	<application android:label="Epager"
 				 android:theme="@style/MainTheme"
-				 android:icon="@mipmap/ic_launcher">		
-	</application>
+				 android:icon="@mipmap/ic_launcher"
+				 android:roundIcon="@mipmap/ic_launcher_round">
+	</application>	
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.SEND_SMS" />
 	<uses-permission android:name="android.permission.RECEIVE_SMS" />

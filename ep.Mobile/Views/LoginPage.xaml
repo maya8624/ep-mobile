@@ -14,14 +14,15 @@
 
     <ContentPage.Content>
         <Grid>
-        <Image Aspect="AspectFill" Source="restaurant.jpg" />
-        <StackLayout Padding="10,300,10,-20">
+            <Image Aspect="AspectFill" Source="restaurant.jpg" />
+            <StackLayout Padding="10,300,10,-20">
             <StackLayout VerticalOptions="Center">
                 <Entry x:Name="email" 
                        Placeholder="Email" 
                        PlaceholderColor="White" 
                        Text="{Binding Email, Mode=TwoWay}" 
-                       TextColor="White"/>
+                       TextColor="White" 
+                       Keyboard="Email" />
                 
                 <Entry x:Name="password" 
                        IsPassword="True" 

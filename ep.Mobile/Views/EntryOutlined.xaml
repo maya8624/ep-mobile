@@ -12,9 +12,11 @@
     </ContentView.Resources>
     <ContentView.Content>
         <Grid>
-            <Frame HasShadow="False" BorderColor="#454545"
-                     Padding="{OnPlatform Android='5,0,5,0', iOS='8,0,8,0'}"
-                       Margin="{OnPlatform Android='0,0,0,0', iOS='0,0,0,0'}"
+            <Frame HasShadow="False" 
+                   BorderColor="#454545"
+                   BackgroundColor="#fff"
+                   Padding="{OnPlatform Android='5,0,5,0', iOS='18,0,0,0'}"
+                   Margin="{OnPlatform Android='0,0,0,0', iOS='0,0,0,0'}"
                    CornerRadius="{OnPlatform Android=5}">
 
             </Frame>
@@ -27,15 +29,14 @@
             <Label x:Name="PlaceHolderLabel"
                        BackgroundColor="White" HorizontalOptions="Start"
                        TextColor="{Binding PlaceholderColor, Source={Reference this}}"
-                       Text="{Binding Placeholder,Source={x:Reference this}}"
-                       Margin="10,0,0,0"
+                       Text="{Binding Placeholder, Source={x:Reference this}}"
+                       Margin="{OnPlatform Android='10,0,0,0', iOS='0,0,0,0'}"
                        VerticalOptions="Center" />
             <controls:BorderlessEntry
-                HeightRequest="{OnPlatform iOS=40}"
-                x:Name="TextBox" VerticalOptions="FillAndExpand"
+                x:Name="TextBox" VerticalOptions="FillAndExpand"                 
+                PlaceholderColor="Green"
                 Text="{Binding Text, Source={x:Reference this}, Mode=TwoWay}"
-                Margin="10,0,0,0"
-                IsPassword="False"
+                Margin="{OnPlatform Android='10,0,0,0', iOS='0,0,0,0'}"
                 Focused="TextBox_Focused"
                 Unfocused="TextBox_Unfocused">              
             </controls:BorderlessEntry>

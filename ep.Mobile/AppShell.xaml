@@ -27,6 +27,12 @@
             </Style>
             <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
             <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+            <!--<Style x:Key="FrameEntry" TargetType="Frame">
+                <Setter Property="BorderColor" Value="{StaticResource LightBlue}"/>
+                <Setter Property="CornerRadius" Value="25"/>
+                <Setter Property="Padding" Value="10,3,10,3"/>
+                <Setter Property="Margin" Value="0"/>
+            </Style>-->
         </ResourceDictionary>
     </Shell.Resources>
 
@@ -64,7 +70,8 @@
         <!--<ShellContent Route ="WeatherPage" Title="Weather" Icon="icon_about.png" ContentTemplate="{DataTemplate local:AutoComplete}" />-->
         <ShellContent Route="OrderPage" Title="Orders" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:OrderPage}" />
         <ShellContent Route="CustomerPage" Title="Customer" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:CustomerPage}" />
-        <ShellContent Route="ShopPage" Title="Shop" Icon="icon_about.png" IsVisible="False" ContentTemplate="{DataTemplate pages:ShopPage}" />
+        <ShellContent Route="ShopPage" Title="Shop" Icon="icon_about.png" IsVisible="True" ContentTemplate="{DataTemplate pages:ShopPage}" />
+        <ShellContent Route="EditShopPage" Title="Business" Icon="icon_about.png" ContentTemplate="{DataTemplate pages:EditShopPage}" />
     </TabBar>
     <!--
         If you would like to navigate to this content you can do so by calling
