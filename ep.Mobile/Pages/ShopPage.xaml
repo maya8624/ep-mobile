@@ -19,7 +19,6 @@
                      VerticalOptions="StartAndExpand"
                      HorizontalOptions="CenterAndExpand"
                      WidthRequest="350">
-            <StackLayout HeightRequest="100"></StackLayout>
             <StackLayout HorizontalOptions="CenterAndExpand" Margin="5">
                 <StackLayout Orientation="Horizontal" 
                              HorizontalOptions="StartAndExpand"
