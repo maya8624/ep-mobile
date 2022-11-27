@@ -14,7 +14,9 @@
     <ContentPage.BindingContext>
         <vm:ShopPageModel/>
     </ContentPage.BindingContext>
-    <ContentPage.Content>        
+    <ContentPage.Content>
+        <ScrollView>
+            
         <StackLayout Spacing="3" 
                      VerticalOptions="StartAndExpand"
                      HorizontalOptions="CenterAndExpand"
@@ -236,5 +238,6 @@
                 </StackLayout>                
             </StackLayout>
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

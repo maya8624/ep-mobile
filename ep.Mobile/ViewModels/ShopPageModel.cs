@@ -22,8 +22,6 @@ namespace ep.Mobile.ViewModels
         private readonly ShopValidation _validation;
 
         public AsyncCommand SaveCommand { get; }
-        //public ICommand GetPlacesCommand { get; set; }
-        //public ObservableCollection<string> Places = new ObservableCollection<string>();
 
         private string _abn;
         public string ABN
@@ -101,36 +99,8 @@ namespace ep.Mobile.ViewModels
             _shopService = DependencyService.Get<IShopService>();
             SaveCommand = new AsyncCommand(SaveAsync);
             _validation = new ShopValidation();
-
-            //GetPlacesCommand = new Xamarin.Forms.Command(async() => await GetPlacesByName());
-            Task.Run(async () => await GetShopAsync());
         }
-
-        //private async Task GetPlacesByName()
-        //{
-        //    try
-        //    {
-        //        string text = _address;
-        //       var endPoint = $"{Constant.GoogleApiBaseUrl}input={Uri.EscapeUriString(text)}&types=establishment&components=country:au&key=AIzaSyBgYSuNmeLsZQnYv4d1cOlDpuURxRVndNE";
-
-        //        var response = await _client.GetStringAsync(endPoint);
-
-        //        var items = JsonConvert.DeserializeObject<Root>(response);
-        //        if (items.predictions.Any())
-        //        {
-        //            foreach (var item in items.predictions)
-        //            {
-        //                Places.Add(item.description);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //await DisplayAlert("Error", ex.Message, "OK");
-        //        throw;
-        //    }
-        //}
-
+       
         private async void OnCancel()
         {
             // This will pop the current page off the navigation stack
@@ -150,11 +120,7 @@ namespace ep.Mobile.ViewModels
                     BusinessName = shop.BusinessName;
                     Owner = shop.Owner;
                     Phone = shop.Phone;
-                }
-                //else
-                //{
-                //    await _pageService.DisplayAlert("Info", $"Business Information is not found", "OK");
-                //}
+                }                
             }
             catch (Exception ex)
             {
@@ -230,6 +196,11 @@ namespace ep.Mobile.ViewModels
             await SecureStorage.SetAsync("password", randomPassword);
             //TODO: send a temp password must be hashed with salt
             return await SecureStorage.GetAsync("password");
+        }
+
+        public override async Task InitializeAsync(object parameter)
+        {
+            await GetShopAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using ep.Mobile.ViewModels;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ep.Mobile.Views
@@ -11,9 +12,10 @@ namespace ep.Mobile.Views
             InitializeComponent();            
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await(BindingContext as ShopPageModel).InitializeAsync(string.Empty);
         }
     }
 }

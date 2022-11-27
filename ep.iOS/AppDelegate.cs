@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ep.Mobile;
+﻿using ep.Mobile;
 using Foundation;
 using Syncfusion.XForms.iOS.TextInputLayout;
 using UIKit;
