@@ -319,6 +319,7 @@ namespace ep.Mobile.ViewModels
             {
                 return;
             }
+
             HubConnection.On<string>($"NewCustomerShop{shop.ShopId}", (item) =>
             {
                 MainThread.BeginInvokeOnMainThread(() =>

@@ -6,6 +6,7 @@
              x:Class="ep.Mobile.Views.ShopPage"
              Title="Save business information"
              Shell.NavBarIsVisible="True"
+             Shell.FlyoutBehavior="Flyout"
              Shell.TabBarIsVisible="False"
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
