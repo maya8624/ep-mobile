@@ -8,4 +8,4 @@
 # Features
 1. MVVM, Dependency Injection
 
-2. Azure Deveop CI/CD Pipeline
+2. Azure Deveops CI/CD Pipeline
