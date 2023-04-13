@@ -2,7 +2,7 @@
 - 
 
 # Environments
-- Xamarin, C#, SQLlLite, Fluent Validation
+- Xamarin, C#, SQLite, Fluent Validation
 
 # Features
 
